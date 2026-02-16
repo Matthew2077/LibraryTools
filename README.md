@@ -1,6 +1,8 @@
 # LibraryTools
 
-# Definizione Progetto:
+## Stato del progetto:
+Il progetto è stato iniziato in data 10 febbraio 2026, è in fase di costruzione iniziale. L'obbiettivo è finire l'MVP, ovvero la versione alpha funzionante del programma.
+
 ### Core Features
 - **Guide come entità strutturate**
 Le guide devono avere ID, Titolo e Contenuto. Nei Meta dati aggiungere tutte le informazioni aggiuntive: autore, categoria di appartenenza, data creazione, data ultima modifica, stato, hashtags per la ricerca.
@@ -27,7 +29,7 @@ Le guide sono il cuore del sistema, essi hanno tre caratteristiche specifiche:
 **Altri Contenuti:**
 - **tags**: Nei meta data possono essere aggiunti dei tags che aiutano l'utente nella ricerca dei contenuti. Questi tag dovrebbero descrivere il contenuto. La funzione dei tag è quindi una funzione prettamente di supporto nella ricerca, non di categorizzazione e quindi di strutturazione.
 - **Autore**: Definire chi ha scritto la guida
-- **Data di creazione**;
+- **DataCreazione**: Indica la data di creazione della guida
 - **Data dell'utima modifica:** utile per il versioning
 - **Stato**: può essere bozza, pubblicato, archiviato (nota: capire come gestire le modifiche);
 
@@ -112,6 +114,7 @@ Guide N ──── N Guide (via GuideLink)
 - fetch API
 
 ### Architettura
+```
 librarytools/
 │
 ├── app/
@@ -148,6 +151,7 @@ librarytools/
 │
 ├── README.md | Stato del progetto, How to install, how to use, integrazioni, info utili
 └── pyproject.toml | Def dipendenze, versione py, strumenti e packaging (requirements.txt insomma)
+```
 
 ## MVP:
 MVP è la versione base funzionante del programma, ecco un elenco delle funzionalità che dovrebbe avere:
