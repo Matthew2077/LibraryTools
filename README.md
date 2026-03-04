@@ -1,7 +1,9 @@
 # LibraryTools
 
 ## Stato del progetto:
-Il progetto è stato iniziato in data 10 febbraio 2026, è in fase di costruzione iniziale. L'obbiettivo è finire l'MVP, ovvero la versione alpha funzionante del programma.
+Obbiettivo: finire l'MVP, ovvero la versione alpha funzionante del programma. Vedi MVP sotto
+Stato di completamento: 5%
+Completamento aspettato per: fine marzo
 
 ### Core Features
 - **Guide come entità strutturate**
@@ -114,44 +116,8 @@ Guide N ──── N Guide (via GuideLink)
 - fetch API
 
 ### Architettura
-```
-librarytools/
-│
-├── app/
-│   ├── main.py | Applicazione che esegue il programma
-│   │
-│   ├── core/ | Core files, servono a tutto il programma
-│   │   ├── config.py | passwords, configurazioni, autenticazione (in futuro) etc
-│   │   └── database.py | uso del database
-│   │
-│   ├── models/  | Come vengono salvati i dati. Definiscono tabelle, colonne, relazioni
-│   │   ├── guide.py
-│   │   ├── category.py
-│   │   ├── tag.py
-│   │   ├── reference.py
-│   │   └── guide_link.py
-│   │
-│   ├── schemas/ |  Che dati accetto? Che dati restituisco?”
-│   │   ├── guide.py
-│   │   ├── category.py
-│   │   └── tag.py
-│   │
-│   ├── api/ Definizione endpoints, parsing requests, return responses, chiamata a services
-│   │   ├── v1/ | versione 1 delle API
-│   │   │   ├── guides.py 
-│   │   │   ├── categories.py
-│   │   │   └── tags.py
-│   │
-│   └── services/ | aggiornamento, creazione, controlli di stato, regole, orchestrare più modelli
-│       └── guide_service.py
-│
-├── migrations/ | versioni DB, backups, cronologia schema etc
-│
-├── tests/ | Per tests di scripts
-│
-├── README.md | Stato del progetto, How to install, how to use, integrazioni, info utili
-└── pyproject.toml | Def dipendenze, versione py, strumenti e packaging (requirements.txt insomma)
-```
+
+*IN REVISIONE*
 
 ## MVP:
 MVP è la versione base funzionante del programma, ecco un elenco delle funzionalità che dovrebbe avere:
