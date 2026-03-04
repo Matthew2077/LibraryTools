@@ -23,24 +23,27 @@ Creare endpoints per future integrazioni api e bots
 ### Entità base:
 #### Guide:
 Le guide sono il cuore del sistema, essi hanno tre caratteristiche specifiche:
-- **ID (NoteID)**: univoco, numerico, auto increment (parte da 100000). Le note con ID < di 1000000 sono note di sistema o usate per altri scopi
-- **Titolo**: Non deve essere univoco, deve essere maggiore di 3 lettere con un massimo di 50/70. 
-- **Contenuto**: Testo, collegamenti intermi, collegamenti esterni
-- **Categoria**: Deve appartenere ad una categoria. 
+- **NoteID**: univoco, numerico, auto increment (parte da 100000). Le note con ID < di 1000000 sono note di sistema o usate per altri scopi
+- **GuideURL**: Nome non cambiabile della guida, in modo che possa essere usato per raggiungere le guide anche se il titolo viene cambiato;
+- **Titolo**: Deve essere maggiore di 3 lettere con un massimo di 50/70, può essere cambiato
+- **Contenuto**: Stringa
+- **Categoria**: Deve appartenere ad una categoria. Per ora sarà una sola
 
 **Altri Contenuti:**
-- **tags**: Nei meta data possono essere aggiunti dei tags che aiutano l'utente nella ricerca dei contenuti. Questi tag dovrebbero descrivere il contenuto. La funzione dei tag è quindi una funzione prettamente di supporto nella ricerca, non di categorizzazione e quindi di strutturazione.
-- **Autore**: Definire chi ha scritto la guida
+- **tags**: Lista di stringhe. Nei meta data possono essere aggiunti dei tags che aiutano l'utente nella ricerca dei contenuti. Questi tag dovrebbero descrivere il contenuto. La funzione dei tag è quindi una funzione prettamente di supporto nella ricerca, non di categorizzazione e quindi di strutturazione.
+- **NomeAutore**: Definire chi ha scritto la guida
 - **DataCreazione**: Indica la data di creazione della guida
-- **Data dell'utima modifica:** utile per il versioning
+- **DataUltimaModifica:** utile per il versioning
+- **DataPubblicazione**: Quando è stata pubblicata
 - **Stato**: può essere bozza, pubblicato, archiviato (nota: capire come gestire le modifiche);
 
 #### Categorie:
 Le categorie sono insiemi di guide che condividono uno stesso tema o argomento. Ogni categoria deve avere:
-- **ID (CatID):** univoco, numerico (parte da 1000 fino a 9999)
-- **Nome**: Identificativo che sarà usato nel sistema per riconoscere e usare la categoria. Deve essere univoco
-- **Parentele**: una categoria può stare da sola, ma per maggiore chiarezza è bene creare un sistema complesso di categorie che migliorare l'organizzazione delle guide nel sistema. 
+- **CatID:** univoco, numerico, autoincrement
+- **CatName**: Identificativo che sarà usato nel sistema per riconoscere e usare la categoria. Deve essere univoco
 - **Descrizione**: Cosa rientra in questa categoria, regole e definizione. 
+
+- **Parentele**: una categoria può stare da sola, ma per maggiore chiarezza è bene creare un sistema complesso di categorie che migliorare l'organizzazione delle guide nel sistema. 
 
 #### Tags 
 I tags sono strutture libere che servono ad aumentare la facilità di ricerca delle guide. Essi possono essere aggiunti dall'autore nel header della guida, non sono  case sensitive (così riduco ridondanza e riduce ambiguità). I tags sono liberi, possono essere creati dagli autori stessi nella loro aggiunta, pertanto nessuno possiede un tag, i tag esistono finché c'è qualcuno che lo usa. 
@@ -48,13 +51,13 @@ I tags sono strutture libere che servono ad aumentare la facilità di ricerca de
 I tags possono essere visti in una visualizzazione specifica che permette di vedere tutti i tags esistenti, quali note sono legate ad esse ed esplorare. 
 
 Ogni tag deve avere:
-- **ID (tagID):** univoco, numerico, auto incrementale (parte da 1);
+- **TagID:** univoco, numerico, auto incrementale (parte da 1);
 - **label**: Deve avere un nome che lo identifica, come "python", "RoK" etc
 
 #### Autore:
 L'autore è colui che scrive le guide, le può modificare, eliminare, archiviare etc. **Caratteristiche dell'autore:**
-- **ID (AuthorID):** univoco, numerico (parte da 10000 fino a 99999)
-- **Nome:** Deve essere univoco, sarà usato nel sistema per riferisi a quell'autore. Deve essere lungo minimo 3 caratteri e per un massimo di 20.
+- **AuthorID:** univoco, numerico (parte da 10000 fino a 99999)
+- **AuthorName:** Deve essere univoco, sarà usato nel sistema per riferisi a quell'autore. Deve essere lungo minimo 3 caratteri e per un massimo di 20.
 - **Bio**: breve testo che lo descrive. (opzionale)
 
 **Cosa può fare l'autore:**
@@ -116,8 +119,23 @@ Guide N ──── N Guide (via GuideLink)
 - fetch API
 
 ### Architettura
-
 *IN REVISIONE*
+```
+/librarytools
+├── main.py              # Inizializza l'app e include i router
+├── core/
+│   ├── database.py      # Engine, SessionLocal
+│   └── models.py        # Classi SQLAlchemy (Guide, Category, Tag, Author)
+│
+├── api/ (o routes/)     # endpoints FastAPI
+│   ├── guides.py        # @router.post("/guides") -> chiama service
+│   └── categories.py    idem
+│
+├── services/            # Azioni del programma
+│   ├── guide_service.py # Funzioni come: create_guide(), get_all_guides()
+│   └── cat_service.py
+│
+```
 
 ## MVP:
 MVP è la versione base funzionante del programma, ecco un elenco delle funzionalità che dovrebbe avere:
