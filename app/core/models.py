@@ -1,3 +1,6 @@
+from sqlalchemy.orm import Mapped, mapped_column, Session
+from datetime import datetime
+from typing import Optional, Dict, List
 
 class Guide(Base): 
     __tablename__ = "Guide"

@@ -2,8 +2,10 @@
 
 ## Stato del progetto:
 Obbiettivo: finire l'MVP, ovvero la versione alpha funzionante del programma. Vedi MVP sotto
-Stato di completamento: 5%
-Completamento aspettato per: fine marzo
+Stato: In costruzione
+File completati: database.py
+Obbiettivo completamento: fine marzo
+
 
 ### Core Features
 - **Guide come entità strutturate**
@@ -124,7 +126,7 @@ Guide N ──── N Guide (via GuideLink)
 /librarytools
 ├── main.py              # Inizializza l'app e include i router
 ├── core/
-│   ├── database.py      # Engine, SessionLocal
+│   ├── database.py      # Engine DB, gestione Session, get_db() func
 │   └── models.py        # Classi SQLAlchemy (Guide, Category, Tag, Author)
 │
 ├── api/ (o routes/)     # endpoints FastAPI
