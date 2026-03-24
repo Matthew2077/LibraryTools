@@ -1,26 +1,46 @@
 # LibraryTools
 
 ## Stato del progetto:
-Obbiettivo: finire l'MVP, ovvero la versione alpha funzionante del programma. Vedi MVP sotto
-Stato: In costruzione
-File completati: database.py
-Obbiettivo completamento: fine marzo
+In sviluppo – costruzione MVP v1
+Librarytools è progettato come backend API-first, con l'obbiettivo di creare un Software per la pubblicazione e la gestione di guide online, strutturate e interconnesse.
 
+### Scope MVP v1
+Il primo rilascio include:
+- CRUD completo per:
+    - Guide
+    - Categorie
+    - Tag
+- Sistema di relazione:
+    - Guide ↔ Tag (many-to-many)
+    - Guide → Categoria (one-to-many)
+- Gestione stati delle guide (bozza / pubblicata / archiviato)
+- Sistema base di ricerca (titolo + tag)
+- Persistenza dati tramite SQLite
+- Documentazione API automatica (Swagger / OpenAPI)
 
 ## Core Features
-- **Guide come entità strutturate**
-Le note devono avere ID, Titolo e Contenuto. Nei Meta dati aggiungere tutte le informazioni aggiuntive: autore, categoria di appartenenza, data creazione, data ultima modifica, stato, hashtags per la ricerca.
-- **Riferimenti interni:**
-All'interno della nota deve essere facile aggiungere collegamenti ad altre note per avere interconnessione ad alto livello. Si può anche citare un pezzo di testo proveniente da un altra nota.
-Possibiltà di aggiungere collegamenti esterni. 
-- **Tags + categorie**
-Devono essere creati a livello di sistema delle categorie chiare che definiscano dove le note stanno. Ogni nota deve essere precisamente allineata in una categoria. I tags possono aggiungere sfumature e possono aiutare nella ricerca delle note
-- **Editor semplice ma solido**
-Aggiungere funzionalità base che possano rendere fluibile il contenuto sia ad autori che lettori. Quindi: grassetto, test sottolineato, corsivo, testo evidenziato, diversi tipi di headers 
-- **Libreria con ricerca**
-Entrando nel sistema l'utente potrà accedere a una schermata a mo' di libreria in cui può cercare le note che preferisce.
-- **Architettura pronta per integrazioni (API / bot)**
-Creare endpoints per future integrazioni api e bots
+- **Note**
+Il programma ha come entità strutturate le note, ovvero documenti di testo con un titolo, un corpo di testo e una categoria d'appartenenza. Ogni nota ha metadati che ne determinano identità, stato e visibilità.
+Saranno presenti anche dati relativi all'autore della nota. Infine, e' possibile legare dei tags alla nota che descrivano il contenuto in modo da migliorare la ricerca interna delle note. 
+
+- **Categorie**
+Le categorie sono strutture caratterizzate da un nome ben preciso con lo scopo di raggruppare in un unico posto note simili in contenuto.
+Sara' possibile ricercare per categoria le note da noi desiderate. 
+
+- **Tags**
+I tags sono strutture libere che servono ad aumentare la facilità di ricerca delle note. Essi hanno la funzione di indicare che tipo di contenuto c'è nella nota. I tag sono creati dagli autori delle note stesse a loro piacimento. 
+
+- **Utenti**:
+Un utente può creare, modificare e gestire le proprie guide. Il sistema prevede ruoli utenti con permessi diversi (Admin, Moderatore, utente). 
+Nella versione attuale l'accesso utente e' presente ma molto semplice, l'autenticazione e la sicurezza sar' migliorata nelle future versioni. Questa versione non e' pensata per il pubblico. 
+Sara' possibile visualizzare le note anche senza registrazione. 
+
+- **Editor**:
+Il sistema supporta contenuti in formato Markdown, permettendo una rappresentazione strutturata e interoperabile tra diverse interfacce.
+
+- **Ricerca**:
+La ricerca interna permette di trovare contenuti, note, attraverso: titolo, tags, categorie. Saranno poi aggiunti filtri per ricerche avanzate. 
+
 
 ## Entità base:
 ### Notes:
@@ -37,12 +57,12 @@ Ogni nota avrà anche una data di creazione, di ultima modifica e di pubblicazio
 - **DateLastEdit:** utile per il versioning
 - **DatePublish**: Quando è stata pubblicata
 
-#### Caratteristiche aggiuntive (foreing keys); 
-- **Category**: Categoria di appartenenza, obbligatoria;
+#### foreing keys; 
+- **CategoryID**: Categoria di appartenenza, obbligatoria. Collegato a CatID di tabella Category;
+- **AuthorID**: Nome di chi ha scritto la nota. Collegato a UserID della tabella User.  
 - **Tags**: Deve avere almeno 3 tags ad esso associati;
-- **AuthorName**: Nome di chi ha scritto la nota
 
-### Categories:
+### Category:
 Le categorie sono strutture caratterizzate da un nome ben preciso con lo scopo di raggruppare in un unico posto note simili in contenuto.
 
 #### Caratteristiche base; 
@@ -65,17 +85,19 @@ NB: in MVPv1 non ci sarà autenticazione vera e propria
 
 #### Caratteristiche base; 
 - **UserID**: Codice numerico univoco che identifica l'utente;
-- **UserName:** Stringa di testo che rappresenza il nome dell'utente, sarà visualizato dagli altri utenti nel programma. Il nome utente  è il nome dell'autore di una guida
+- **Username:** Stringa di testo che rappresenza il nome dell'utente, sarà visualizato dagli altri utenti nel programma. Il nome utente  è il nome dell'autore di una guida
 - **Email:** Email per login
 - **Password:** Password per il login
 
 
 ### Relazioni:
+```
 User 1 ──── N Note
 Category 1 ─ N Note
 Note N ──── N Tag
 Note 1 ──── N Reference
-Note N ──── N Note (via GuideLink)
+Note N ──── N Note
+```
 
 ## STACK:
 **Backend**
@@ -117,16 +139,9 @@ Note N ──── N Note (via GuideLink)
 │
 ```
 
-## MVPv1:
-MVP è la versione base funzionante del programma, ecco un elenco delle funzionalità che dovrebbe avere:
-- CRUD Guide (Create, Read, Update, Delete)
-- CRUD Category (Create, Read, Update, Delete)
-- Tags funzionanti (many-to-many)
-- Ricerca base (titolo + tags)
-- API documentata via Swagger
-- DB persistente (SQLite) 
 
-## APIs - Endpoints:
+
+## APIs - Endpoints (prototipo):
 *IN REVISIONE*
 
 Definiamo come funzionano gli endpoints, ricordati che sono URLs, con HTTP. Qui i metodi HTTP: 
