@@ -1,16 +1,15 @@
 from sqlalchemy.orm import sessionmaker, declarative_base, Session, Generator
-from datetime import datetime
 import sqlalchemy as sa
-from typing import Optional, Dict, List
+
 
 # Initializazione DB
 engine = sa.create_engine(
-    'sqlite:///memory',
+    'sqlite:///:memory:',
     echo=True, # echo per + dettagli
-    SQLALCHEMY_Dconnect_args={"check_same_thread": False}
+    connect_args={"check_same_thread": False}
     ) 
 # file locale: sqlite:///LibraryTools.db
-# DB in RAM: sqlite:///:memory
+# DB in RAM: sqlite:///:memory:
 Base = declarative_base() # usarto per dichiarare le tabelle
 
 

@@ -1,7 +1,7 @@
 from fastapi import Depends, FastAPI
 from sqlalchemy.orm import Session
-# from .database import get_db
-
+from core import Base
+from .core.models import User
 
 # PROVVISORIO... 
 
