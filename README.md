@@ -122,22 +122,51 @@ Note N ──── N Note
 - fetch API
 
 ## Architettura:
+Il progetto e' strutturato in modo da separare i compiti in modo modulare e permettere cosi una maggiore scalabilita' nel tempo. Riassumo qui sotto le caratteristiche cardine di ogni file e cartella. 
+
+
+### Caratteristica delle cartelle:
+api/
+Under costruction. In questa cartella mettero' gli endpoints fast-api
+
+core/
+Cartella che contiene i file che fanno da cuore pulsante dell'applicazione, qui ci sono i modelli delle tabelle e l'inizializzazione del DB. 
+
+schemas/
+In questa cartella inserisco le classi Pydantic che servono per validare i dati in entrata e in uscita. Ogni entita' base ha un suo file dove ha diverse classi pydantic a seconda dell'operazione fatta. 
+
+services/
+Under costruction. Qui ci saranno tutte le operazioni vere e proprie del programma
+
+### Caratteristiche di ogni file e lavoro svolto:
+main.py
+File che gestisce l'inizializzazione dell'app
+
+core/database.py
+In questo file e' contenuto l'engine SQLalchemy del DB, la dichiarazione di Base (necessaria per le tabelle in models) e la funzione get_db() che serve per chiamare il DB nel programma. E' qui presente anche la gestione della sessione.
+
+core/models.py
+In questo file vengono dichiarate con la sintassi SQLalchemy le principali tabelle usate nel sistema, ovvero: Note, Tag, Category, User
+
+### Schema Architettura
 ```
 /librarytools
-├── main.py              # Inizializza l'app e include i router
+├── main.py              
 ├── core/
-│   ├── database.py      # Engine DB, gestione Session, get_db() func
-│   └── models.py        # Classi SQLAlchemy (Guide, Category, Tag, User)
+│   ├── database.py      
+│   └── models.py       
 │
-├── api/ (routes/)     # endpoints FastAPI
-│   ├── notes.py        # @router.post("/notes") -> chiama service
-│   └── categories.py    idem
+├── api/ (routes/)     
+│   ├── notes.py        
+│   └── categories.py    
 │
-├── services/            # Azioni del programma
-│   ├── note_service.py # Funzioni come: create_note(), get_all_notes()
+├── services/            
+│   ├── note_service.py
 │   └── cat_service.py
 │
+├── services/
 ```
+
 
 
 

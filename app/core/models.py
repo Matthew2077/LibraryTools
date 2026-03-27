@@ -36,10 +36,11 @@ class Note(Base):
     CategoryID: Mapped[int] = mapped_column(ForeignKey("Categories.CatID"), index=True)
     
     AuthorID: Mapped[int] = mapped_column(ForeignKey("Users.UserID"))
+    author: Mapped["User"] = relationship(back_populates="notes") 
     tags: Mapped[list["Tag"]] = relationship(
         secondary="note_tags",
         back_populates="notes"
-    )
+    ) # in schemas/note.py i tags sono una lista di int. Quindi passa IDs.
 
 
 class Category(Base):
@@ -68,7 +69,7 @@ class User(Base):
     UserName: Mapped[str] = mapped_column(unique=True, index=True, nullable=False)
     Email: Mapped[Optional[str]] = mapped_column(nullable=True)
     Password: Mapped[Optional[str]] = mapped_column(nullable=True)
-    notes: Mapped[list["Note"]] = relationship(back_populates="Author")
+    notes: Mapped[list["Note"]] = relationship(back_populates="author")
 
     def __repr__(self) -> str: #rappresentazione
         return f"<user(UserID={self.UserID}, UserName={self.UserName}"
