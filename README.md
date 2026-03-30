@@ -132,6 +132,9 @@ Under costruction. In questa cartella mettero' gli endpoints fast-api
 core/
 Cartella che contiene i file che fanno da cuore pulsante dell'applicazione, qui ci sono i modelli delle tabelle e l'inizializzazione del DB. 
 
+repositories/
+Operazioni al database, tutte le queries, vengono usate da services. 
+
 schemas/
 In questa cartella inserisco le classi Pydantic che servono per validare i dati in entrata e in uscita. Ogni entita' base ha un suo file dove ha diverse classi pydantic a seconda dell'operazione fatta. 
 
@@ -151,22 +154,31 @@ In questo file vengono dichiarate con la sintassi SQLalchemy le principali tabel
 ### Schema Architettura
 ```
 /librarytools
-├── main.py              
+├── main.py    
+│
+├── api/ (routes/)     
+│   ├── notes.py        
+│   └── categories.py  
+│
 ├── core/
 │   ├── database.py      
 │   └── models.py       
 │
-├── api/ (routes/)     
-│   ├── notes.py        
-│   └── categories.py    
+├── repositories/
+│   ├── note_repository.py
+│   └── category_repository.py
+│
+├── schemas/            
+│   ├── category.py
+│   ├── note.py
+│   ├── tag.py
+│   └── user.py
 │
 ├── services/            
 │   ├── note_service.py
 │   └── cat_service.py
 │
-├── services/
 ```
-
 
 
 
