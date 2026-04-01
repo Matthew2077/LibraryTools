@@ -44,12 +44,12 @@ La ricerca interna permette di trovare contenuti, note, attraverso: titolo, tags
 
 ## Entità base:
 ### Notes:
-Le note sono il cuore del programma, qui convergono tutte le altre entità base. La nota è in parole semplici un documento di testo che principalmente 3 caratteristiche: un titolo, un contenuto (che potrà includere anche immagini e collegamenti, ma principalmente si parla di testo) e una categoria. A questi tre si aggiungono NoteURL per non perdere l'accesso alle note solo perchè si cambia titolo (anche di una sola lettera) e lo Stato, ovvero se quella nota è una bozza, pubblicata o archiviata.
+Le note sono il cuore del programma, qui convergono tutte le altre entità base. La nota è in parole semplici un documento di testo che principalmente 3 caratteristiche: un titolo, un contenuto (che potrà includere anche immagini e collegamenti, ma principalmente si parla di testo) e una categoria. A questi tre si aggiungono NoteSlug per non perdere l'accesso alle note solo perchè si cambia titolo (anche di una sola lettera) e lo Stato, ovvero se quella nota è una bozza, pubblicata o archiviata.
 Ogni nota avrà anche una data di creazione, di ultima modifica e di pubblicazione.
 
 #### Caratteristiche base; 
 - **NoteID**: Codice numerico univoco che identifica la nota. Caratteristiche: univoco, numerico, auto incrementativo. 
-- **NoteURL**: Nome, stringa di testo, che si riferisce in modo univoco ad una nota In gergo tenico Slug;
+- **NoteSlug**: Nome, stringa di testo, che si riferisce in modo univoco ad una nota In gergo tenico Slug;
 - **Title**: Stringa di testo che fa da titolo della nota. 
 - **Body**: materiale che compone la nota stessa, testo, urls, immagini etc;
 - **State**: Definizione della nota, lo stato influesce permessi di motifica, visione etc. Esso può essere: bozza, pubblicato, archiviato;

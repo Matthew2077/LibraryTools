@@ -22,7 +22,7 @@ class Note(Base):
     __tablename__ = "Notes"
 
     NoteID: Mapped[int] = mapped_column(primary_key=True, unique=True, autoincrement=True, index=True)
-    NotesURL: Mapped[str] = mapped_column(unique=True, index=True)
+    NoteSlug: Mapped[str] = mapped_column(unique=True, index=True)
     Title: Mapped[str] = mapped_column(nullable=True, index=True)
     Body: Mapped[str] 
     State: Mapped[NoteState] = mapped_column(Enum(NoteState), default=NoteState.BOZZA)
