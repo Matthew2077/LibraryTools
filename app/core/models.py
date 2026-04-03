@@ -21,7 +21,7 @@ class Note(Base):
     # Info tabella:
     __tablename__ = "Notes"
 
-    NoteID: Mapped[int] = mapped_column(primary_key=True, unique=True, autoincrement=True, index=True)
+    NoteID: Mapped[int] = mapped_column(primary_key=True, autoincrement=True, index=True)
     NoteSlug: Mapped[str] = mapped_column(unique=True, index=True)
     Title: Mapped[str] = mapped_column(nullable=True, index=True)
     Body: Mapped[str] 

@@ -1,4 +1,4 @@
-from sqlalchemy.orm import sessionmaker, declarative_base, Session
+from sqlalchemy.orm import sessionmaker, DeclarativeBase, Session
 import sqlalchemy as sa
 from typing import Generator
 
@@ -11,15 +11,16 @@ engine = sa.create_engine(
     ) 
 # file locale: sqlite:///LibraryTools.db
 # DB in RAM: sqlite:///:memory:
-Base = declarative_base() # usarto per dichiarare le tabelle
 
+class Base(DeclarativeBase): # usarto per dichiarare le tabelle
+    pass 
 
 SessionLocal = sessionmaker(bind=engine) # FABBRICA DI SESSIONI | bind: binda la sessione a questo db
 
 
 # Dependency Injection | Chiamata al DB
 def get_db() -> Generator:
-    db = SessionLocal() # usa la sessione creata prima
+    db = SessionLocal() 
     try:
         yield db
     finally:
