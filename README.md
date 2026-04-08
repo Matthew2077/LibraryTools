@@ -1,96 +1,113 @@
 # LibraryTools
+LibraryTools is an API-first back-end project designed to manage and structure knowledge through notes, categories, and tags.
 
-## Stato del progetto:
-In sviluppo – costruzione MVP v1
-Librarytools è progettato come backend API-first, con l'obbiettivo di creare un Software per la pubblicazione e la gestione di guide online, strutturate e interconnesse.
+The project follows a layered architecture to ensure separation of concerns and scalability:
+- **API layer** (Fast API): handles routing and request/response validation
+- **Service layer**: contains business logic
+- **Repository layer**: manages database interactions
+- **Data layer**: SQLAlchemy ORM with relational models
+
+**Core Features**
+- CRUD operations for Notes and Categories
+- Tag system with many-to-many relationships
+- State management (draft, published, archived)
+- Basic search (title and tags)
+- Structured content using Markdown
+
+**Tech Stack**
+- Python
+- FastAPI
+- SQLAlchemy
+- Pydantic
+- SQLite (for MVP)
+
+**Goals**
+The goal of LibraryTools is to evolve into a modular system capable of powering multiple front-ends (web, Discord & Telegram bots, android apps etc) through a single API server.
+
+This project is actively developed as a real-world learning environment to deepen back-end development skills and system design.
+
+## Project Status:
+In development – ​​MVP v1 construction
+Librarytools is designed as an API-first backend, with the goal of creating software for publishing and managing structured, interconnected online guides.
 
 ### Scope MVP v1
-Il primo rilascio include:
-- CRUD completo per:
-    - Guide
-    - Categorie
-    - Tag
-- Sistema di relazione:
-    - Guide ↔ Tag (many-to-many)
-    - Guide → Categoria (one-to-many)
-- Gestione stati delle guide (bozza / pubblicata / archiviato)
-- Sistema base di ricerca (titolo + tag)
-- Persistenza dati tramite SQLite
-- Documentazione API automatica (Swagger / OpenAPI)
+The first release includes:
+- Complete CRUD for:
+- Guides
+- Categories
+- Tags
+- Relationship system:
+- Guides ↔ Tags (many-to-many)
+- Guides → Category (one-to-many)
+- Guide status management (draft / published / archived)
+- Basic search system (title + tag)
+- Data persistence via SQLite
+- Automatic API documentation (Swagger / OpenAPI)
 
 ## Core Features
-- **Note**
-Il programma ha come entità strutturate le note, ovvero documenti di testo con un titolo, un corpo di testo e una categoria d'appartenenza. Ogni nota ha metadati che ne determinano identità, stato e visibilità.
-Saranno presenti anche dati relativi all'autore della nota. Infine, e' possibile legare dei tags alla nota che descrivano il contenuto in modo da migliorare la ricerca interna delle note. 
+- **Notes**
+The program's structured entities are notes, which are text documents with a title, body text, and category. Each note has metadata that determines its identity, status, and visibility.
+Data about the note's author will also be included. Finally, it's possible to attach tags to the note that describe its content to improve internal note searches.
 
-- **Categorie**
-Le categorie sono strutture caratterizzate da un nome ben preciso con lo scopo di raggruppare in un unico posto note simili in contenuto.
-Sara' possibile ricercare per categoria le note da noi desiderate. 
+- **Categories**
+Categories are structures characterized by a specific name and designed to group similar notes in one place.
+You can search for desired notes by category.
 
 - **Tags**
-I tags sono strutture libere che servono ad aumentare la facilità di ricerca delle note. Essi hanno la funzione di indicare che tipo di contenuto c'è nella nota. I tag sono creati dagli autori delle note stesse a loro piacimento. 
+Tags are free structures that serve to make notes easier to find. They serve to indicate the type of content contained in the note. Tags are created by the note authors themselves.
 
-- **Utenti**:
-Un utente può creare, modificare e gestire le proprie guide. Il sistema prevede ruoli utenti con permessi diversi (Admin, Moderatore, utente). 
-Nella versione attuale l'accesso utente e' presente ma molto semplice, l'autenticazione e la sicurezza sar' migliorata nelle future versioni. Questa versione non e' pensata per il pubblico. 
-Sara' possibile visualizzare le note anche senza registrazione. 
+- **Users**:
+A user can create, edit, and manage their own guides. The system provides user roles with different permissions (Admin, Moderator, User).
+In the current version, user access is available but very simple; authentication and security will be improved in future versions. This version is not intended for the public.
+It will be possible to view notes even without registering.
 
 - **Editor**:
-Il sistema supporta contenuti in formato Markdown, permettendo una rappresentazione strutturata e interoperabile tra diverse interfacce.
+The system supports content in Markdown format, allowing for a structured and interoperable representation across different interfaces.
 
-- **Ricerca**:
-La ricerca interna permette di trovare contenuti, note, attraverso: titolo, tags, categorie. Saranno poi aggiunti filtri per ricerche avanzate. 
+- **Search**:
+The internal search allows you to find content and notes by title, tags, and categories. Filters for advanced searches will be added later.
 
-
-## Entità base:
+## Basic Entities:
 ### Notes:
-Le note sono il cuore del programma, qui convergono tutte le altre entità base. La nota è in parole semplici un documento di testo che principalmente 3 caratteristiche: un titolo, un contenuto (che potrà includere anche immagini e collegamenti, ma principalmente si parla di testo) e una categoria. A questi tre si aggiungono NoteSlug per non perdere l'accesso alle note solo perchè si cambia titolo (anche di una sola lettera) e lo Stato, ovvero se quella nota è una bozza, pubblicata o archiviata.
-Ogni nota avrà anche una data di creazione, di ultima modifica e di pubblicazione.
+Notes are the heart of the program; all other basic entities converge here. Simply put, a note is a text document with three main characteristics: a title, content (which may also include images and links, but is primarily text), and a category. To these three, NoteSlug is added to ensure you don't lose access to notes just by changing the title (even by a single letter), and the Status, i.e., whether the note is a draft, published, or archived.
+Each note will also have a creation date, last modification date, and publication date.
 
-#### Caratteristiche base; 
-- **NoteID**: Codice numerico univoco che identifica la nota. Caratteristiche: univoco, numerico, auto incrementativo. 
-- **NoteSlug**: Nome, stringa di testo, che si riferisce in modo univoco ad una nota In gergo tenico Slug;
-- **Title**: Stringa di testo che fa da titolo della nota. 
-- **Body**: materiale che compone la nota stessa, testo, urls, immagini etc;
-- **State**: Definizione della nota, lo stato influesce permessi di motifica, visione etc. Esso può essere: bozza, pubblicato, archiviato;
-- **DateCreation**: Indica la data di creazione della nota
-- **DateLastEdit:** utile per il versioning
-- **DatePublish**: Quando è stata pubblicata
+#### Basic Features;
+- **NoteID**: A unique numeric code that identifies the note. Characteristics: unique, numeric, auto-incrementing.
+- **NoteSlug**: Name, text string, that uniquely refers to a note. In technical jargon, it's called a slug;
+- **Title**: Text string that serves as the title of the note.
+- **Body**: Material that makes up the note itself, text, URLs, images, etc.;
+- **State**: Definition of the note; the status affects permissions for editing, viewing, etc. It can be: draft, published, archived;
+- **DateCreation**: Indicates the date the note was created.
+- **DateLastEdit: Useful for versioning.
+- **DatePublish**: When it was published.
 
-#### foreing keys; 
-- **CategoryID**: Categoria di appartenenza, obbligatoria. Collegato a CatID di tabella Category;
-- **AuthorID**: Nome di chi ha scritto la nota. Collegato a UserID della tabella User.  
-- **Tags**: Deve avere almeno 3 tags ad esso associati;
+#### foreign keys;
+- **CategoryID**: Category to which it belongs, mandatory. Linked to the CatID of the Category table.
+- **AuthorID**: Name of the person who wrote the note. Linked to the UserID of the User table.
+- **Tags**: Must have at least 3 tags associated with it;
 
 ### Category:
-Le categorie sono strutture caratterizzate da un nome ben preciso con lo scopo di raggruppare in un unico posto note simili in contenuto.
+Categories are structures characterized by a specific name with the purpose of grouping notes with similar content in one place.
 
-#### Caratteristiche base; 
-- **CatID**: Codice numerico univoco che identifica la categoria. aratteristiche: univoco, numerico, auto incrementativo. 
-- **CatName**: Nome della categoria, esso può variare nel tempo. Esempio: Storie fantastiche, guide di cucina, guide di Rise of Kingdoms etc
-- **Description**: Descrizione della categoria, specifica cosa dovrebbe contenere la categoria e cosa non rientra in essa.
+#### Basic Features;
+- **CatID**: Unique numeric code that identifies the category. Characteristics: unique, numeric, auto-incrementing.
+- **CatName**: Name of the category; this may change over time. Example: Fantasy stories, cooking guides, Rise of Kingdoms guides, etc.
+- **Description**: Description of the category, specifying what the category should contain and what it does not.
 
-### Tags 
-I tags sono strutture libere che servono ad aumentare la facilità di ricerca delle note. Essi hanno la funzione di indicare che tipo di contenuto c'è nella nota. I tag sono creati dagli autori delle note stesse a loro piacimento
+### Tags
+Tags are free structures that serve to make notes easier to find. They serve to indicate the type of content contained in the note. Tags are created by the authors of the notes themselves as they wish.
 
-#### Caratteristiche base; 
-- **TagID:** Codice numerico univoco che identifica il tag;
-- **Label**: Nome visualizzato dagli utenti. Esempio: Python, RoK, Storia, Fantasy; 
+#### Basic Features;
+- **TagID:** Unique numeric code that identifies the tag;
+- **Label**: Name displayed to users. Example: Python, RoK, History, Fantasy;
 
 ### User:
-L'utente è chi usufrisce dell'applicazione, a seconda dei suoi permessi può performare diverse azioni, dalla creazione all'archivio di note, la condivisione e visualizzazione.
+The user is the person using the application. Depending on their permissions, they can perform various actions, from creating and archiving notes, to sharing and viewing.
 
-NB: in MVPv1 non ci sarà autenticazione vera e propria
+NB: There will be no authentication in MVPv1.
 
-
-#### Caratteristiche base; 
-- **UserID**: Codice numerico univoco che identifica l'utente;
-- **Username:** Stringa di testo che rappresenza il nome dell'utente, sarà visualizato dagli altri utenti nel programma. Il nome utente  è il nome dell'autore di una guida
-- **Email:** Email per login
-- **Password:** Password per il login
-
-
-### Relazioni:
+### Relations:
 ```
 User 1 ──── N Note
 Category 1 ─ N Note
@@ -106,52 +123,51 @@ Note N ──── N Note
 - Uvicorn (ASGI server)
 
 **Database**
-- SQLite → MVP / sviluppo
-- PostgreSQL → produzione / crescita
+- SQLite → MVP / Development
+- PostgreSQL → Production 
 
 **ORM & DB layer**
 - SQLAlchemy 2.0*
 - Alembic(migrazioni)
 
 **Data validation / schema**
-- Pydantic v2 per: request / response models e separazione netta tra API schema e DB schema
+- Pydantic v2 per: request / response models and API & DB schema separation
 
 **Frontend**
 - HTML + CSS
 - JavaScript vanilla
 - fetch API
 
-## Architettura:
-Il progetto e' strutturato in modo da separare i compiti in modo modulare e permettere cosi una maggiore scalabilita' nel tempo. Riassumo qui sotto le caratteristiche cardine di ogni file e cartella. 
+## Architecture:
+The project is structured to separate tasks in a modular way, thus allowing for greater scalability over time. Below, I summarize the key characteristics of each file and folder.
 
-
-### Caratteristica delle cartelle:
+### Folder characteristics:
 api/
-Under costruction. In questa cartella mettero' gli endpoints fast-api
+Under construction. I'll place the fast-api endpoints in this folder.
 
 core/
-Cartella che contiene i file che fanno da cuore pulsante dell'applicazione, qui ci sono i modelli delle tabelle e l'inizializzazione del DB. 
+Folder containing the files that form the heart of the application; this folder contains the table models and DB initialization.
 
 repositories/
-Operazioni al database, tutte le queries, vengono usate da services. 
+Database operations, all queries, are used by services.
 
 schemas/
-In questa cartella inserisco le classi Pydantic che servono per validare i dati in entrata e in uscita. Ogni entita' base ha un suo file dove ha diverse classi pydantic a seconda dell'operazione fatta. 
+In this folder, I'll place the Pydantic classes used to validate incoming and outgoing data. Each basic entity has its own file containing different Pydantic classes depending on the operation performed.
 
 services/
-Under costruction. Qui ci saranno tutte le operazioni vere e proprie del programma
+Under construction. All the actual program operations will be contained here.
 
-### Caratteristiche di ogni file e lavoro svolto:
+### Characteristics of each file and the work performed:
 main.py
-File che gestisce l'inizializzazione dell'app
+File that manages the app's initialization
 
 core/database.py
-In questo file e' contenuto l'engine SQLalchemy del DB, la dichiarazione di Base (necessaria per le tabelle in models) e la funzione get_db() che serve per chiamare il DB nel programma. E' qui presente anche la gestione della sessione.
+This file contains the SQLalchemy database engine, the Base declaration (required for tables in models), and the get_db() function used to call the database in the program. Session management is also present here.
 
 core/models.py
-In questo file vengono dichiarate con la sintassi SQLalchemy le principali tabelle usate nel sistema, ovvero: Note, Tag, Category, User
+This file declares the main tables used in the system using SQLalchemy syntax: Notes, Tags, Categories, and Users.
 
-### Schema Architettura
+### Architecture Schema
 ```
 /librarytools
 ├── main.py    
@@ -180,43 +196,38 @@ In questo file vengono dichiarate con la sintassi SQLalchemy le principali tabel
 │
 ```
 
+## APIs - Endpoints (prototype):
+*UNDER REVIEW*
 
-
-## APIs - Endpoints (prototipo):
-*IN REVISIONE*
-
-Definiamo come funzionano gli endpoints, ricordati che sono URLs, con HTTP. Qui i metodi HTTP: 
-
-|Metodo|Significato|Uso|
+|Method|Meaning|Usage|
 |---|---|---|
-|GET|Leggere|Visualizzare dati|
-|POST|Creare|Nuova risorsa|
-|PUT / PATCH|Modificare|Update|
-|DELETE|Eliminare|Cancellare|
+|GET|Read|Display data|
+|POST|Create|New resource|
+|PUT / PATCH|Modify|Update|
+|DELETE|Delete|Clear|
 
-Gli endpoints possono essere quindi composti così:
+The endpoints can therefore be composed as follows:
+/api/APIversion/whatdoIwanttomanipulate/{parameters}
 
-/api/versioneAPI/cosavogliomanipolare/{parametri}
-
-### Endpoints per Notes:
-GET    /api/v1/notes
-POST   /api/v1/notes
-GET    /api/v1/notes/{id}
-PATCH  /api/v1/notes/{id}
+### Endpoints for Notes:
+GET /api/v1/notes
+POST /api/v1/notes
+GET /api/v1/notes/{id}
+PATCH /api/v1/notes/{id}
 DELETE /api/v1/notes/{id}
 
-### Endpoints per Categorie:
-GET    /api/v1/categories
-POST   /api/v1/categories
-GET    /api/v1/categories/{id}
-PATCH  /api/v1/categories/{id}
+### Endpoints for Categories:
+GET /api/v1/categories
+POST /api/v1/categories
+GET /api/v1/categories/{id}
+PATCH /api/v1/categories/{id}
 DELETE /api/v1/categories/{id}
-GET    /api/v1/categories/{id}/notes
+GET /api/v1/categories/{id}/notes
 
-### Endpoints per TAGs:
+### Endpoints for TAGs:
 GET /api/v1/tags
 GET /api/v1/tags/{id}
 GET /api/v1/tags/{id}/notes
 
-**Esempio:**
+**Example:**
 `/api/v1/notes/{id}`
