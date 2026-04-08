@@ -1,6 +1,7 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 from core.models import User
+from typing import Dict
 
 #-------LETTURA
 def get_user_by_id(db: Session, user_id: int): 
@@ -13,3 +14,22 @@ def get_all_users(db: Session):
     result = db.execute(statement)
     return result.scalars().all()
 
+#-------CRUD
+def create(db: Session, user: User): #Session + Oggetto SQLalchemy 
+    db.add(user) # aggiunge alla sessione
+    db.commit() 
+    db.refresh(user) 
+    return user
+
+def update(db: Session, user: User, update_data: Dict): # Session + Oggetto esistente + dati da aggiornare
+    for field, value in update_data.items():
+        setattr(user, field, value)# 
+    db.commit()
+    db.refresh(user)
+    return user
+
+def delete(db: Session, user: User):
+    db.delete(user)
+    db.commit()
+    db.refresh(user)
+    return user
