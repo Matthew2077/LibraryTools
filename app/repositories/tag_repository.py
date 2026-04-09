@@ -9,13 +9,18 @@ def get_tag_by_id(db: Session, tag_id: int):
     result = db.execute(statement) # eseguo il codice
     return result.scalar_one_or_none()
 
+def get_tag_by_label(db: Session, tag_label: str): 
+    statement = select(Tag).where(Tag.Label == tag_label) # questa e' difatti la quary
+    result = db.execute(statement) # eseguo il codice
+    return result.scalar_one_or_none()
+
 def get_all_tags(db: Session):
     statement = select(Tag) # Uguale a SELECT * FROM Tags
     result = db.execute(statement)
     return result.scalars().all()
 
 #-------CRUD
-def create(db: Session, tag: Tag): #Session + Oggetto SQLalchemy 
+def create_repo_tag(db: Session, tag: Tag): #Session + Oggetto SQLalchemy 
     db.add(tag) # aggiunge alla sessione
     db.commit() 
     db.refresh(tag) 

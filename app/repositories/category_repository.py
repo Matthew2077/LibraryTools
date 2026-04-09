@@ -20,7 +20,7 @@ def get_category_by_name(db: Session, category_name: str):
     return result.scalar_one_or_none()
 
 #-------CRUD
-def create(db: Session, category: Category): #Session + Oggetto SQLalchemy 
+def create_category(db: Session, category: Category): #Session + Oggetto SQLalchemy 
     db.add(category) # aggiunge alla sessione
     db.commit() 
     db.refresh(category) 

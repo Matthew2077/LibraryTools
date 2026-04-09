@@ -4,6 +4,7 @@ from sqlalchemy import ForeignKey, Enum
 from datetime import datetime
 from typing import Optional
 from core import Base
+from typing import List
 
 class NoteState(enum.Enum):
     BOZZA = "bozza"
@@ -28,16 +29,16 @@ class Note(Base):
     State: Mapped[NoteState] = mapped_column(Enum(NoteState), default=NoteState.BOZZA)
 
     ## Date Gestite
-    DateCreation: Mapped[datetime] = mapped_column(default=datetime.now)
-    DateLastEdit: Mapped[datetime] = mapped_column(default=datetime.now, nullable=True)
-    DatePublish: Mapped[datetime] = mapped_column(default=datetime.now, nullable=True)
+    DateCreation: Mapped[datetime] = mapped_column(default=datetime.now())
+    DateLastEdit: Mapped[datetime] = mapped_column(default=datetime.now(), nullable=True)
+    DatePublish: Mapped[datetime] = mapped_column(default=datetime.now(), nullable=True)
 
     # Foreing keys
     CategoryID: Mapped[int] = mapped_column(ForeignKey("Categories.CatID"), index=True)
     
     AuthorID: Mapped[int] = mapped_column(ForeignKey("Users.UserID"))
     author: Mapped["User"] = relationship(back_populates="notes") 
-    tags: Mapped[list["Tag"]] = relationship(
+    tags: Mapped[List["Tag"]] = relationship(
         secondary="note_tags",
         back_populates="notes"
     ) # in schemas/note.py i tags sono una lista di int. Quindi passa IDs.
@@ -49,7 +50,7 @@ class Category(Base):
     CatID: Mapped[int] = mapped_column(primary_key=True, autoincrement=True, index=True)
     CatName: Mapped[str] = mapped_column(unique=True)
     Description: Mapped[Optional[str]] = mapped_column(nullable=True)
-    notes: Mapped[list["Note"]] = relationship(back_populates="categories")
+    notes: Mapped[List["Note"]] = relationship(back_populates="categories")
 
 
 class Tag(Base):
@@ -57,7 +58,7 @@ class Tag(Base):
 
     TagID: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     Label: Mapped[str] = mapped_column(nullable=False)
-    notes: Mapped[list["Note"]] = relationship(
+    notes: Mapped[List["Note"]] = relationship(
         secondary="note_tags",
         back_populates="tags"
     )
@@ -69,7 +70,7 @@ class User(Base):
     UserName: Mapped[str] = mapped_column(unique=True, index=True, nullable=False)
     Email: Mapped[Optional[str]] = mapped_column(nullable=True)
     Password: Mapped[Optional[str]] = mapped_column(nullable=True)
-    notes: Mapped[list["Note"]] = relationship(back_populates="author")
+    notes: Mapped[List["Note"]] = relationship(back_populates="author")
 
     def __repr__(self) -> str: #rappresentazione
         return f"<user(UserID={self.UserID}, UserName={self.UserName}"

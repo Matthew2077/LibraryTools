@@ -15,7 +15,7 @@ def get_all_users(db: Session):
     return result.scalars().all()
 
 #-------CRUD
-def create(db: Session, user: User): #Session + Oggetto SQLalchemy 
+def create_user(db: Session, user: User): #Session + Oggetto SQLalchemy 
     db.add(user) # aggiunge alla sessione
     db.commit() 
     db.refresh(user) 
