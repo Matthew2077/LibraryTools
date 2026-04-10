@@ -20,20 +20,20 @@ def get_all_tags(db: Session):
     return result.scalars().all()
 
 #-------CRUD
-def create_repo_tag(db: Session, tag: Tag): #Session + Oggetto SQLalchemy 
+def save_tag(db: Session, tag: Tag): #Session + Oggetto SQLalchemy 
     db.add(tag) # aggiunge alla sessione
     db.commit() 
     db.refresh(tag) 
     return tag
 
-def update(db: Session, tag: Tag, update_data: Dict): # Session + Oggetto esistente + dati da aggiornare
+def edit_tag (db: Session, tag: Tag, update_data: Dict): # Session + Oggetto esistente + dati da aggiornare
     for field, value in update_data.items():
         setattr(tag, field, value)# 
     db.commit()
     db.refresh(tag)
     return tag
 
-def delete(db: Session, tag: Tag):
+def remove_tag(db: Session, tag: Tag):
     db.delete(tag)
     db.commit()
     db.refresh(tag)

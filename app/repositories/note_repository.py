@@ -38,20 +38,20 @@ def get_by_tag_id(db: Session, tag_id: int):
     return result.scalars().all()
 
 #-------CRUD
-def create(db: Session, note: Note): #Session + Oggetto SQLalchemy Note
+def save_note(db: Session, note: Note): #Session + Oggetto SQLalchemy Note
     db.add(note) # aggiunge alla sessione
     db.commit() #eseguo, lo scrivo nel db
     db.refresh(note) #ritorno allo stato iniziale per chiudere il flusso della funzione
     return note
 
-def update(db: Session, note: Note, update_data: Dict): # Session + Oggetto esistente + dati da aggiornare
+def edit_note(db: Session, note: Note, update_data: Dict): # Session + Oggetto esistente + dati da aggiornare
     for field, value in update_data.items():
         setattr(note, field, value)# versione light di note.Title = ... note.Body = ... note.State = ...
     db.commit()
     db.refresh(note)
     return note
 
-def delete(db: Session, note: Note):
+def remove_note(db: Session, note: Note):
     db.delete(note)
     db.commit()
     db.refresh(note)

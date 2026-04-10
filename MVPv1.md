@@ -111,12 +111,15 @@ This file declares the main tables used in the system using SQLalchemy syntax: N
 │   └── categories.py  
 │
 ├── core/
+│   ├── __init__.py    
 │   ├── database.py      
 │   └── models.py       
 │
 ├── repositories/
+│   ├── category_repository.py
 │   ├── note_repository.py
-│   └── category_repository.py
+│   ├── tag_repository.py
+│   └── user_repository.py
 │
 ├── schemas/            
 │   ├── category.py
@@ -125,8 +128,10 @@ This file declares the main tables used in the system using SQLalchemy syntax: N
 │   └── user.py
 │
 ├── services/            
+│   ├── category_service.py
 │   ├── note_service.py
-│   └── cat_service.py
+│   ├── tag_service.py
+│   └── user_service.py
 │
 ```
 

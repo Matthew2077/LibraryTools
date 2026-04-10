@@ -15,20 +15,20 @@ def get_all_users(db: Session):
     return result.scalars().all()
 
 #-------CRUD
-def create_user(db: Session, user: User): #Session + Oggetto SQLalchemy 
+def save_user(db: Session, user: User): #Session + Oggetto SQLalchemy 
     db.add(user) # aggiunge alla sessione
     db.commit() 
     db.refresh(user) 
     return user
 
-def update(db: Session, user: User, update_data: Dict): # Session + Oggetto esistente + dati da aggiornare
+def edit_user(db: Session, user: User, update_data: Dict): # Session + Oggetto esistente + dati da aggiornare
     for field, value in update_data.items():
         setattr(user, field, value)# 
     db.commit()
     db.refresh(user)
     return user
 
-def delete(db: Session, user: User):
+def remove_user(db: Session, user: User):
     db.delete(user)
     db.commit()
     db.refresh(user)

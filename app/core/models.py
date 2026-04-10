@@ -10,6 +10,7 @@ class NoteState(enum.Enum):
     BOZZA = "bozza"
     PUBBLICATO = "pubblicato"
     ARCHIVIATO = "archiviato"
+    ELIMINATO = "eliminato"
     
 # Praticamente creo un record che e' composto dal noteID in Notes e il tag_ID
 class NoteTag(Base):
