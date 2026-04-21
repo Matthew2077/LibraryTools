@@ -1,9 +1,10 @@
 from typing import List
 from sqlalchemy.orm import Session
-from repositories.note_repository import save_note, get_note_by_id, remove_note
-from repositories.tag_repository import get_tag_by_label, create_repo_tag
+from repositories.note_repository import save_note, get_note_by_id, remove_note, edit_note
+from repositories.tag_repository import get_tag_by_label, create_repo_tag, get_tag_by_id
 from repositories.category_repository import get_category_by_id
 from core.models import Note, NoteState, Tag
+from schemas.note import NoteUpdate
 from datetime import datetime
 
 def read_note(db: Session, note_id: int):
@@ -58,10 +59,37 @@ def create_note(db: Session, title: str, body: str, category_id: int, Tags: List
     return result
 
 
-def update_note():
+def update_note(db: Session, note_id: int, data: NoteUpdate):
+    if data is None:
+        raise ValueError("No data uploaded")
+
+    note = read_note(db, note_id)
+    
+    update_data = data.model_dump(exclude_unset=True)
+    tag_ids = update_data.pop("TagIDs", None)
+    
+    
+    if tag_ids is not None:
+        tag_list = []
+        for tag_id in tag_ids:
+              tag = get_tag_by_id(db, tag_id) # leggi tag
+              
+              if tag is None:
+                  raise ValueError(f"Tag with ID {tag_id} not found")
+              tag_list.append(tag)
+
+        note.tags = tag_list
+
+    # Applica tutti gli altri campi
+    for field, value in update_data.items():
+          setattr(note, field, value)
+
+    db.commit()
+    db.refresh(note)
+
+    return note
 
 
-    return
 
 def delete_note(db: Session, note_id: int):
     note = read_note(db, note_id)

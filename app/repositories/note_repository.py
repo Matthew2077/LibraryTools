@@ -1,7 +1,6 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 from core.models import Note, NoteState, NoteTag
-from schemas.note import NoteCreate
 from typing import Dict
 
 #-------LETTURA

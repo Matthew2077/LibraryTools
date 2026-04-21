@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
-from repositories.user_repository import get_user_by_id, save_user, remove_user
+from repositories.user_repository import get_user_by_id, save_user, remove_user, edit_user
 from core.models import User
+from schemas.user import UserUpdate
 
 def read_user(db: Session, user_id: int):
     user = get_user_by_id(db, user_id)
@@ -22,11 +23,21 @@ def create_user(db: Session, user_name: str, user_email: str | None = None, user
 
     saved_user = save_user(db, new_user)
 
-    return save_user
+    return saved_user
 
-def update_user():
+def update_user(db: Session, user_id: int, data: UserUpdate):
+    if data is None:
+        raise ValueError("No data uploaded")
+    
+    user = read_user(db, user_id)
+    update_data = data.model_dump(exclude_unset=True)
+    
+    if not update_data:
+        raise ValueError("No fields to update")
 
-    return
+    updated_user = edit_user(db, user, update_data)
+
+    return updated_user
 
 def delete_user(db: Session, user_id: int):
     user = read_user(db, user_id)

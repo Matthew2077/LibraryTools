@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
-from repositories.category_repository import get_category_by_id, save_category, remove_category
+from repositories.category_repository import get_category_by_id, save_category, remove_category, edit_category
 from core.models import Category
+from schemas.category import CategoryUpdate
 
 def read_category(db: Session, category_id: int):
     category = get_category_by_id(db, category_id)
@@ -23,9 +24,20 @@ def create_category(db: Session, category: str, label: str | None = None):
 
     return saved_category
 
-def update_category():
+def update_category(db: Session, category_id: int, data: CategoryUpdate):
+    if data is None:
+        raise ValueError("No data uploaded")
 
-    return
+    category = read_category(db, category_id)
+    
+    update_data = data.model_dump(exclude_unset=True)
+
+    if not update_data:
+        raise ValueError("No fields to update")
+
+
+    updated_category = edit_category(db, category, update_data)
+    return updated_category
 
 def delete_category(db: Session, category_id: int):
     # devi cambiare categoria a tutte quelle categorie interessate
