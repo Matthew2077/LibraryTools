@@ -1,6 +1,6 @@
 from typing import List
 from sqlalchemy.orm import Session
-from repositories.note_repository import save_note, get_note_by_id, remove_note, edit_note
+from repositories.note_repository import save_note, get_note_by_id, remove_note, edit_note, get_all_notes
 from repositories.tag_repository import get_tag_by_label, create_repo_tag, get_tag_by_id
 from repositories.category_repository import get_category_by_id
 from core.models import Note, NoteState, Tag
@@ -14,6 +14,10 @@ def read_note(db: Session, note_id: int):
         raise ValueError("Note not found")
     
     return note
+
+def read_all_notes(db: Session):
+    note_list = get_all_notes(db)
+    return note_list
 
 def create_note(db: Session, title: str, body: str, category_id: int, Tags: List[str]):
     note_slug = title  # Da normalizzare in futuro

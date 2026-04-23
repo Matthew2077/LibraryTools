@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from repositories.tag_repository import get_tag_by_id, save_tag, remove_tag, edit_tag
+from repositories.tag_repository import get_tag_by_id, save_tag, remove_tag, edit_tag, get_all_tags
 from core.models import Tag
 from schemas.tag import TagUpdate
 
@@ -10,6 +10,11 @@ def read_tag(db: Session, tag_id: int):
     if not tag:
         raise ValueError("tag not found")
     return tag
+
+def read_all_tags(db: Session):
+    tag_list = get_all_tags(db)
+    return tag_list
+
 
 def create_tag(db: Session, label: str):
 

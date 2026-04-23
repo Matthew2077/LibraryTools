@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from repositories.user_repository import get_user_by_id, save_user, remove_user, edit_user
+from repositories.user_repository import get_user_by_id, save_user, remove_user, edit_user, get_all_users
 from core.models import User
 from schemas.user import UserUpdate
 
@@ -9,6 +9,10 @@ def read_user(db: Session, user_id: int):
     if not user:
         raise ValueError("user not found")
     return user
+
+def read_all_users(db: Session):
+    user_list = get_all_users(db)
+    return user_list
 
 def create_user(db: Session, user_name: str, user_email: str | None = None, user_pswd: str | None = None):
 
