@@ -7,6 +7,7 @@ class NoteBase(BaseModel):
     Title: str
     Body: str
     CategoryID: int
+    TagIDs: list[int]
 
 class NoteCreate(NoteBase):
     pass

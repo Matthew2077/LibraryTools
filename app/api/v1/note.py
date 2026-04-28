@@ -1,16 +1,11 @@
 from fastapi import Depends, FastAPI
 from main import app
 from sqlalchemy.orm import Session
-from services.note_service import read_note, read_all_notes, create_note
+from services.note_service import read_note, read_all_notes, create_note, update_note, delete_note
 from core.database import get_db
-from schemas.note import NoteRead, NoteCreate
+from schemas.note import NoteRead, NoteCreate, NoteUpdate
 from typing import List
 
-
-# root
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
 
 # READ NOTE:
 @app.get("/api/v1/notes/{note_id}", response_model=NoteRead) #ENDPOINT + modello della risposta
@@ -25,8 +20,20 @@ def view_all_notes(db: Session = Depends(get_db)) -> List[NoteRead]:
     note_list = read_all_notes(db)
     return note_list
 
-# TO FIX ---
-@app.post("/api/v1/create_new", response_model=NoteRead) # metto NoteRead perche' cosi restituisco i dati
-def create_new_note(title, body, category_id, tags: List[str], db: Session = Depends(get_db)) -> NoteRead:
-    note = create_note(db, title, body, category_id, tags)
+# CREATE NOTE:
+@app.post("/api/v1/notes", response_model=NoteRead) # metto NoteRead perche' cosi restituisco i dati
+def create_new_note(note: NoteCreate, db: Session = Depends(get_db)) -> NoteRead:
+    new_note = create_note(db, note)
+    return new_note
+
+# UPDATE NOTE:
+@app.patch("/api/v1/notes/{note_id}", response_model=NoteRead)
+def patch_note(note_id: int, data: NoteUpdate, db: Session = Depends(get_db)) -> NoteRead:
+    updated = update_note(db, note_id, data)
+    return updated
+
+# DELETE NOTE:
+@app.delete("/api/v1/notes/{note_id}", response_model=NoteRead)
+def erase_note(note_id: int, db: Session = Depends(get_db)) -> NoteRead:
+    note = delete_note(db, note_id)
     return note
