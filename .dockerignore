@@ -1,4 +1,5 @@
 #dockerfile
 #docker-compose.yml
+.venv
 
 # remove in future

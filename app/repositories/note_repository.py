@@ -1,6 +1,6 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
-from core.models import Note, NoteState, NoteTag
+from core.models import Note, note_state, NoteTag
 from typing import Dict
 
 #-------LETTURA
@@ -20,7 +20,7 @@ def get_note_by_slug(db: Session, Note_slug: str):
     return result.scalar_one_or_none() # e' unique quindi non ha senso mettere scalars().all()
 
 
-def get_note_by_state(db: Session, Note_state: NoteState):
+def get_note_by_state(db: Session, Note_state: note_state):
     statement = select(Note).where(Note.State == Note_state)
     result = db.execute(statement)
     return result.scalar_one_or_none()

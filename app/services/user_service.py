@@ -14,13 +14,13 @@ def read_all_users(db: Session):
     user_list = get_all_users(db)
     return user_list
 
-def create_user(db: Session, user_name: str, user_email: str | None = None, user_pswd: str | None = None):
+def create_user(db: Session, new_username: str, user_email: str | None = None, user_pswd: str | None = None):
 
-    if user_name is None:
+    if new_username is None:
         raise ValueError("Username invalid")
     
     new_user = User(
-        UserName = user_name,
+        UserName = new_username,
         Email = user_email,
         Password = user_pswd
     )

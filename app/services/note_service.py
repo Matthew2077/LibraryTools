@@ -1,9 +1,9 @@
 from typing import List
 from sqlalchemy.orm import Session
 from repositories.note_repository import save_note, get_note_by_id, remove_note, edit_note, get_all_notes
-from repositories.tag_repository import get_tag_by_label, create_repo_tag, get_tag_by_id
+from repositories.tag_repository import get_tag_by_label, save_tag, get_tag_by_id
 from repositories.category_repository import get_category_by_id
-from core.models import Note, NoteState, Tag
+from core.models import Note, note_state, Tag
 from schemas.note import NoteUpdate
 from datetime import datetime
 
@@ -30,7 +30,7 @@ def create_note(db: Session, title: str, body: str, category_id: int, Tags: List
         if verify_tag is None:
             new_tag = Tag(Label = tag)
             # crealo nel Db
-            create_repo_tag(db, new_tag)
+            save_tag(db, new_tag)
             ## lo aggiungo alla lista
             tag_list.append(new_tag)
         else:
@@ -45,7 +45,7 @@ def create_note(db: Session, title: str, body: str, category_id: int, Tags: List
         NoteSlug = note_slug, 
         Title = title,
         Body = body,
-        State = NoteState.BOZZA, # Parte da Bozza
+        State = note_state.BOZZA, # Parte da Bozza
 
         ## Date Gestite
         DateCreation = datetime.now(),

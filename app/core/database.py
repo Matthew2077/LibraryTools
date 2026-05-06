@@ -1,7 +1,7 @@
-from sqlalchemy.orm import sessionmaker, DeclarativeBase, Session
 import sqlalchemy as sa
 from typing import Generator
-
+from sqlalchemy.orm import sessionmaker, DeclarativeBase
+from sqlalchemy import create_engine
 
 # Initializazione DB
 engine = sa.create_engine(
@@ -16,6 +16,7 @@ class Base(DeclarativeBase): # usarto per dichiarare le tabelle
     pass 
 
 SessionLocal = sessionmaker(bind=engine) # FABBRICA DI SESSIONI | bind: binda la sessione a questo db
+
 
 
 # Dependency Injection | Chiamata al DB
