@@ -3,6 +3,8 @@ from typing import Optional
 
 class UserBase(BaseModel):
     UserName: str
+    Email: Optional[str] = None
+    Password: Optional[str] = None
     
 class UserCreate(UserBase):
     pass

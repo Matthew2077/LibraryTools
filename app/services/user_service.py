@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from repositories.user_repository import get_user_by_id, save_user, remove_user, edit_user, get_all_users
 from core.models import User
-from schemas.user import UserUpdate
+from schemas.user import UserUpdate, UserCreate
 
 def read_user(db: Session, user_id: int):
     user = get_user_by_id(db, user_id)
@@ -14,7 +14,12 @@ def read_all_users(db: Session):
     user_list = get_all_users(db)
     return user_list
 
-def create_user(db: Session, new_username: str, user_email: str | None = None, user_pswd: str | None = None):
+def create_user(db: Session, userdata: UserCreate):
+
+    
+    new_username = userdata.UserName
+    user_email = userdata.Email
+    user_pswd = userdata.Password
 
     if new_username is None:
         raise ValueError("Username invalid")

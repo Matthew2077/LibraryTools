@@ -5,12 +5,13 @@ from sqlalchemy import create_engine
 
 # Initializazione DB
 engine = sa.create_engine(
-    'sqlite:///:memory:',
+    'sqlite:///LibraryTools.db',
     echo=True, # echo per + dettagli
     connect_args={"check_same_thread": False}
     ) 
 # file locale: sqlite:///LibraryTools.db
 # DB in RAM: sqlite:///:memory:
+# se usi /// crea il db dove lanci il comando, sistema poi
 
 class Base(DeclarativeBase): # usarto per dichiarare le tabelle
     pass 
