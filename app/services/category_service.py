@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from repositories.category_repository import get_category_by_id, save_category, remove_category, edit_category, get_all_categories
 from core.models import Category
-from schemas.category import CategoryUpdate
+from schemas.category import CategoryUpdate, CategoryCreate
 
 def read_category(db: Session, category_id: int):
     category = get_category_by_id(db, category_id)
@@ -10,11 +10,15 @@ def read_category(db: Session, category_id: int):
         raise ValueError("Category not found")
     return category
 
+
 def read_all_categories(db: Session):
     category_list = get_all_categories(db)
     return category_list
 
-def create_category(db: Session, category: str, label: str | None = None):
+def create_category(db: Session, cat_data: CategoryCreate):
+
+    category = cat_data.CatName
+    label = cat_data.Description
 
     if category is None:
         raise ValueError("Category name invalid")

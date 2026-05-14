@@ -7,7 +7,7 @@ class NoteBase(BaseModel):
     Title: str
     Body: str
     CategoryID: int
-    TagIDs: list[int]
+    TagID: list[int]
 
 class NoteCreate(NoteBase):
     pass
@@ -16,7 +16,7 @@ class NoteUpdate(BaseModel):
     Title: Optional[str] = None
     Body: Optional[str] = None
     CategoryID: Optional[int] = None
-    TagIDs: Optional[list[int]] = None
+    TagID: Optional[list[int]] = None
 
 class NoteRead(NoteBase):
     NoteID: int

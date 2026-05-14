@@ -10,7 +10,7 @@ def get_user_by_id(db: Session, user_id: int):
     return result.scalar_one_or_none()
 
 def get_all_users(db: Session):
-    statement = select(User).where(User.UserID > 1) # Uguale a SELECT * FROM Users
+    statement = select(User) # Uguale a SELECT * FROM Users
     result = db.execute(statement)
     return result.scalars().all()
 

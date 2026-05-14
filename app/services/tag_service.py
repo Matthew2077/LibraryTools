@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from repositories.tag_repository import get_tag_by_id, save_tag, remove_tag, edit_tag, get_all_tags
 from core.models import Tag
-from schemas.tag import TagUpdate
+from schemas.tag import TagUpdate, TagCreate
 
 def read_tag(db: Session, tag_id: int):
     
@@ -16,15 +16,14 @@ def read_all_tags(db: Session):
     return tag_list
 
 
-def create_tag(db: Session, label: str):
+def create_tag(db: Session, tag: TagCreate):
+    newLabel = tag.Label
 
-    if label is None:
+    if newLabel is None:
         raise ValueError("Label invalid")
-    
-    normalized = label.strip().lower()
 
-    new_tag = Tag(
-        Label = normalized
+    new_tag = Tag(  
+        Label = newLabel
     )
 
     saved_tag = save_tag(db, new_tag)

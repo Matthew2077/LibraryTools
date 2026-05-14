@@ -12,7 +12,7 @@ router = APIRouter()
 @router.get("/api/v1/categories/{category_id}", response_model=CategoryRead) 
 def read_one_category(category_id: int, db: Session = Depends(get_db)) -> CategoryRead:
     category = read_category(db, category_id)
-    return {category}
+    return category
 
 
 @router.get("/api/v1/categories", response_model=List[CategoryRead])

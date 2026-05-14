@@ -4,7 +4,7 @@ from repositories.note_repository import save_note, get_note_by_id, remove_note,
 from repositories.tag_repository import get_tag_by_label, save_tag, get_tag_by_id
 from repositories.category_repository import get_category_by_id
 from core.models import Note, note_state, Tag
-from schemas.note import NoteUpdate
+from schemas.note import NoteUpdate, NoteCreate
 from datetime import datetime
 
 def read_note(db: Session, note_id: int):
@@ -19,9 +19,13 @@ def read_all_notes(db: Session):
     note_list = get_all_notes(db)
     return note_list
 
-def create_note(db: Session, title: str, body: str, category_id: int, Tags: List[str]):
-    note_slug = title  # Da normalizzare in futuro
-    author_id = 2155 # placeholder per v1 DEVE ESISTERE btw
+def create_note(db: Session, note_data: NoteCreate):
+    note_slug = note_data.Title
+    author_id = 2155 # placeholder per v2 DEVE ESISTERE btw
+    title = note_data.Title
+    body = note_data.Body
+    category_id = note_data.CategoryID
+    Tags = note_data.TagID
 
     # verifica TAGS
     tag_list: List[Tag] = []
@@ -70,7 +74,7 @@ def update_note(db: Session, note_id: int, data: NoteUpdate):
     note = read_note(db, note_id)
     
     update_data = data.model_dump(exclude_unset=True)
-    tag_ids = update_data.pop("TagIDs", None)
+    tag_ids = update_data.pop("TagID", None)
     
     
     if tag_ids is not None:

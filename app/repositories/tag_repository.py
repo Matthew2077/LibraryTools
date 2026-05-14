@@ -9,8 +9,8 @@ def get_tag_by_id(db: Session, tag_id: int):
     result = db.execute(statement) # eseguo il codice
     return result.scalar_one_or_none()
 
-def get_tag_by_label(db: Session, tag_label: str): 
-    statement = select(Tag).where(Tag.Label == tag_label) # questa e' difatti la quary
+def get_tag_by_label(db: Session, tag_Label: str): 
+    statement = select(Tag).where(Tag.Label == tag_Label) # questa e' difatti la quary
     result = db.execute(statement) # eseguo il codice
     return result.scalar_one_or_none()
 
@@ -36,5 +36,4 @@ def edit_tag (db: Session, tag: Tag, update_data: Dict): # Session + Oggetto esi
 def remove_tag(db: Session, tag: Tag):
     db.delete(tag)
     db.commit()
-    db.refresh(tag)
     return tag

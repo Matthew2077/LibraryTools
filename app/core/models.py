@@ -23,7 +23,7 @@ class NoteTag(Base):
 class Note(Base):
     __tablename__ = "notes"
     NoteID: Mapped[int] = mapped_column(primary_key=True, autoincrement=True, index=True)
-    noteslug: Mapped[str] = mapped_column(unique=True, index=True)
+    NoteSlug: Mapped[str] = mapped_column(unique=True, index=True)
     Title: Mapped[Optional[str]] = mapped_column(nullable=True, index=True)
     Body: Mapped[str]
     State: Mapped[note_state] = mapped_column(Enum(note_state), default=note_state.BOZZA)
@@ -46,7 +46,7 @@ class Category(Base):
     CatName: Mapped[str] = mapped_column(unique=True)
     Description: Mapped[Optional[str]] = mapped_column(nullable=True)
 
-    notes: Mapped[List["Note"]] = relationship(back_populates="category")  # ✅ corretto
+    notes: Mapped[List["Note"]] = relationship(back_populates="category")
 
 
 class Tag(Base):

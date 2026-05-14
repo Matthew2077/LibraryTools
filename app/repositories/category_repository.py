@@ -36,5 +36,4 @@ def edit_category(db: Session, category: Category, update_data: Dict): # Session
 def remove_category(db: Session, category: Category):
     db.delete(category)
     db.commit()
-    db.refresh(category)
     return category

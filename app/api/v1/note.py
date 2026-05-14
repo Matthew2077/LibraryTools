@@ -24,7 +24,7 @@ def view_all_notes(db: Session = Depends(get_db)) -> List[NoteRead]:
     return note_list
 
 # CREATE NOTE:
-@router.post("/api/v1/notes", response_model=NoteRead) # metto NoteRead perche' cosi restituisco i dati
+@router.post("/notes", response_model=NoteRead) # metto NoteRead perche' cosi restituisco i dati
 def create_new_note(note: NoteCreate, db: Session = Depends(get_db)) -> NoteRead:
     new_note = create_note(db, note)
     return new_note

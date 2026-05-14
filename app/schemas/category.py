@@ -19,8 +19,8 @@ class CategoryUpdate(BaseModel):
 
 class CategoryRead(CategoryBase):
     CatID: int
-
+    model_config = ConfigDict(from_attributes=True)
     # per trasformare oggetti DB in response JSON
     # Deve stare dentro lo schema che usi per le response:
-    model_config = ConfigDict(from_attributes=True)
+    
 
