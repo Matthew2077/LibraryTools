@@ -3,24 +3,21 @@ from typing import Optional
 
 # Definizione di un basemodel da passare in argomento alle altre classi
 class CategoryBase(BaseModel):
-    CatName: str
-    Description: Optional[str] = None
+    name: str
+    label: Optional[str] = None
+    model_config = ConfigDict(from_attributes=True)
 
-# Se vuoi fare ulteriori verifiche qui, togli pass, CategoryBase e procedi. 
-# altrimenti basta passare CategoryBase
 class CategoryCreate(CategoryBase):
     pass
 
-# Qui prende 1 o 2 parametri, se ci sono ok altrimenti nulla. Sono opzionali
 class CategoryUpdate(BaseModel):
-    CatName: Optional[str] = None
-    Description: Optional[str] = None
-
+    name: Optional[str] = None
+    label: Optional[str] = None
+    model_config = ConfigDict(from_attributes=True)
 
 class CategoryRead(CategoryBase):
-    CatID: int
-    model_config = ConfigDict(from_attributes=True)
-    # per trasformare oggetti DB in response JSON
-    # Deve stare dentro lo schema che usi per le response:
+    id: int
+    name: str
+    label: Optional[str] = None
     
 

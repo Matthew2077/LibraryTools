@@ -2,16 +2,18 @@ from pydantic import BaseModel, ConfigDict
 from typing import Optional
 
 class TagBase(BaseModel):
-    Label: str
+    name: str
+    model_config = ConfigDict(from_attributes=True)
 
 class TagCreate(TagBase):
     pass
 
 class TagUpdate(BaseModel):
-    Label: Optional[str] = None
-
-class TagRead(TagBase):
-    TagID: int
+    name: Optional[str] = None
     model_config = ConfigDict(from_attributes=True)
+    
+class TagRead(TagBase):
+    id: int
+    
 
     

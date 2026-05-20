@@ -21,7 +21,7 @@ def read_all_notes(db: Session):
 
 def create_note(db: Session, note_data: NoteCreate):
     note_slug = note_data.Title
-    author_id = 2155 # placeholder per v2 DEVE ESISTERE btw
+    author_id = 1 # placeholder per v2 DEVE ESISTERE btw
     title = note_data.Title
     body = note_data.Body
     category_id = note_data.CategoryID
