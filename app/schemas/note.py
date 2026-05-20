@@ -7,10 +7,10 @@ class NoteBase(BaseModel):
     Title: str
     Body: str
     CategoryID: int
-    TagID: list[int]
+    
 
 class NoteCreate(NoteBase):
-    pass
+    TagID: list[int]
 
 class NoteUpdate(BaseModel):
     Title: Optional[str] = None
@@ -20,6 +20,6 @@ class NoteUpdate(BaseModel):
 
 class NoteRead(NoteBase):
     NoteID: int
-    tags: list[TagRead]
+    #Tags: list[TagRead]
     model_config = ConfigDict(from_attributes=True)
 
