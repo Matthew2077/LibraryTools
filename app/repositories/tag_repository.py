@@ -5,12 +5,12 @@ from typing import Dict
 
 #-------LETTURA
 def get_tag_by_id(db: Session, tag_id: int): 
-    statement = select(Tag).where(Tag.TagID == tag_id) # questa e' difatti la quary
+    statement = select(Tag).where(Tag.id == tag_id) # questa e' difatti la quary
     result = db.execute(statement) # eseguo il codice
     return result.scalar_one_or_none()
 
-def get_tag_by_label(db: Session, tag_Label: str): 
-    statement = select(Tag).where(Tag.Label == tag_Label) # questa e' difatti la quary
+def get_tag_by_label(db: Session, name: str): 
+    statement = select(Tag).where(Tag.name == name) # questa e' difatti la quary
     result = db.execute(statement) # eseguo il codice
     return result.scalar_one_or_none()
 

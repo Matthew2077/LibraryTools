@@ -1,11 +1,11 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
-from core.models import Note, note_state, NoteTag
+from core.models import Note, NoteState, NoteTag
 from typing import Dict
 
 #-------LETTURA
 def get_note_by_id(db: Session, note_id: int):
-    statement = select(Note).where(Note.NoteID == note_id) # questa e' difatti la quary
+    statement = select(Note).where(Note.id == note_id) # questa e' difatti la quary
     result = db.execute(statement) # eseguo il codice
     return result.scalar_one_or_none() # scalar_one_or_none: ritorna il risultato come uno scalar o None se non ce' risultato
 
@@ -14,19 +14,19 @@ def get_all_notes(db: Session):
     result = db.execute(statement)
     return result.scalars().all()
 
-def get_note_by_slug(db: Session, Note_slug: str):
-    statement = select(Note).where(Note.NoteSlug == Note_slug)
+def get_note_by_slug(db: Session, note_slug: str):
+    statement = select(Note).where(Note.slug == note_slug)
     result = db.execute(statement)
     return result.scalar_one_or_none() # e' unique quindi non ha senso mettere scalars().all()
 
 
-def get_note_by_state(db: Session, Note_state: note_state):
-    statement = select(Note).where(Note.State == Note_state)
+def get_note_by_state(db: Session, note_state: NoteState):
+    statement = select(Note).where(Note.state == note_state)
     result = db.execute(statement)
     return result.scalar_one_or_none()
 
 def get_by_category_id(db: Session, cat_id: int): # restituisce tutte le note in quella categoria
-    statement = select(Note).where(Note.CategoryID == cat_id)
+    statement = select(Note).where(Note.id == cat_id)
     result = db.execute(statement)
     return result.scalars().all()
 
@@ -53,5 +53,4 @@ def edit_note(db: Session, note: Note, update_data: Dict): # Session + Oggetto e
 def remove_note(db: Session, note: Note):
     db.delete(note)
     db.commit()
-    db.refresh(note)
     return note

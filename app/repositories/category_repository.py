@@ -5,7 +5,7 @@ from typing import Dict
 
 #-------LETTURA
 def get_category_by_id(db: Session, category_id: int): 
-    statement = select(Category).where(Category.CatID == category_id) # questa e' difatti la quary
+    statement = select(Category).where(Category.id == category_id) # questa e' difatti la quary
     result = db.execute(statement) # eseguo il codice
     return result.scalar_one_or_none()
 
@@ -15,7 +15,7 @@ def get_all_categories(db: Session):
     return result.scalars().all()
 
 def get_category_by_name(db: Session, category_name: str):
-    statement = select(Category).where(Category.CatName == category_name)
+    statement = select(Category).where(Category.name == category_name)
     result = db.execute(statement)
     return result.scalar_one_or_none()
 
@@ -23,12 +23,12 @@ def get_category_by_name(db: Session, category_name: str):
 def save_category(db: Session, category: Category): #Session + Oggetto SQLalchemy 
     db.add(category) # aggiunge alla sessione
     db.commit() 
-    db.refresh(category) 
+    db.refresh(category)
     return category
 
 def edit_category(db: Session, category: Category, update_data: Dict): # Session + Oggetto esistente + dati da aggiornare
     for field, value in update_data.items():
-        setattr(category, field, value)# 
+        setattr(category, field, value) 
     db.commit()
     db.refresh(category)
     return category

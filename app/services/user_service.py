@@ -1,13 +1,13 @@
 from sqlalchemy.orm import Session
 from repositories.user_repository import get_user_by_id, save_user, remove_user, edit_user, get_all_users
 from core.models import User
-from schemas.user import UserUpdate, UserCreate
+from schemas.user_schemas import UserUpdate, UserCreate
 
 def read_user(db: Session, user_id: int):
     user = get_user_by_id(db, user_id)
     
     if not user:
-        raise ValueError("user not found")
+        raise ValueError(f"user {user_id} not found")
     return user
 
 def read_all_users(db: Session):
@@ -15,23 +15,14 @@ def read_all_users(db: Session):
     return user_list
 
 def create_user(db: Session, userdata: UserCreate):
+    if userdata.name is None:
+        raise ValueError(f"Username {userdata.name} invalid")
 
-    
-    new_username = userdata.UserName
-    user_email = userdata.Email
-    user_pswd = userdata.Password
-
-    if new_username is None:
-        raise ValueError("Username invalid")
-    
     new_user = User(
-        UserName = new_username,
-        Email = user_email,
-        Password = user_pswd
+        name = userdata.name,
+        email = userdata.email
     )
-
     saved_user = save_user(db, new_user)
-
     return saved_user
 
 def update_user(db: Session, user_id: int, data: UserUpdate):
@@ -45,12 +36,9 @@ def update_user(db: Session, user_id: int, data: UserUpdate):
         raise ValueError("No fields to update")
 
     updated_user = edit_user(db, user, update_data)
-
     return updated_user
 
 def delete_user(db: Session, user_id: int):
     user = read_user(db, user_id)
-
     remove_user(db, user)
-
     return user

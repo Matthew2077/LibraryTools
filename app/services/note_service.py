@@ -3,15 +3,18 @@ from sqlalchemy.orm import Session
 from repositories.note_repository import save_note, get_note_by_id, remove_note, edit_note, get_all_notes
 from repositories.tag_repository import get_tag_by_label, save_tag, get_tag_by_id
 from repositories.category_repository import get_category_by_id
-from core.models import Note, note_state, Tag
-from schemas.note import NoteUpdate, NoteCreate
+from core.models import Note, NoteState, Tag
+from schemas.note_schemas import NoteUpdate, NoteCreate
 from datetime import datetime
+
+def generate_slug(title: str) -> str:
+    return title.lower().strip().replace(" ", "-")
 
 def read_note(db: Session, note_id: int):
     note = get_note_by_id(db, note_id)
 
     if not note:
-        raise ValueError("Note not found")
+        raise ValueError(f"Note {note_id} not found")
     
     return note
 
@@ -20,44 +23,37 @@ def read_all_notes(db: Session):
     return note_list
 
 def create_note(db: Session, note_data: NoteCreate):
-    note_slug = note_data.Title
-    author_id = 1 # placeholder per v2 DEVE ESISTERE btw
-    title = note_data.Title
-    body = note_data.Body
-    category_id = note_data.CategoryID
-    Tags = note_data.TagID
+    author_id = 1 # deve venire da notecreate
+    category_id = note_data.category_id
+    slug = generate_slug(note_data.title)
 
     # verifica TAGS
     tag_list: List[Tag] = []
-    for tag in Tags:
-        verify_tag = get_tag_by_label(db, tag)
+    for tag_id in note_data.tag_ids:
+        verify_tag = get_tag_by_id(db, tag_id)
         if verify_tag is None:
-            new_tag = Tag(Label = tag)
-            # crealo nel Db
-            save_tag(db, new_tag)
-            ## lo aggiungo alla lista
-            tag_list.append(new_tag)
-        else:
-            tag_list.append(verify_tag)
+            raise ValueError(f"Tag {tag_id} not found")
+        tag_list.append(verify_tag)
 
     # verifica Category
     verify_category = get_category_by_id(db, category_id)
     if verify_category is None:
-        raise ValueError("Category specified not found")
+        raise ValueError(f"Category {category_id} not found")
 
     note = Note(
-        NoteSlug = note_slug, 
-        Title = title,
-        Body = body,
-        State = note_state.BOZZA, # Parte da Bozza
+        slug = slug,
+        title = note_data.title,
+        content = note_data.content,
+        state = NoteState.BOZZA, # Parte da Bozza
 
         ## Date Gestite
-        DateCreation = datetime.now(),
-        DateLastEdit = datetime.now(),
+        creation_date = datetime.now(),
+        update_date = datetime.now(),
+        publish_date = datetime.now(),
 
         ## FKs:
-        CategoryID = category_id,
-        AuthorID = author_id,
+        category_id = category_id,
+        author_id = author_id,
         tags = tag_list
     )
 
@@ -68,13 +64,10 @@ def create_note(db: Session, note_data: NoteCreate):
 
 
 def update_note(db: Session, note_id: int, data: NoteUpdate):
-    if data is None:
-        raise ValueError("No data uploaded")
-
     note = read_note(db, note_id)
     
     update_data = data.model_dump(exclude_unset=True)
-    tag_ids = update_data.pop("TagID", None)
+    tag_ids = update_data.pop("tags", None)
     
     
     if tag_ids is not None:
@@ -87,6 +80,8 @@ def update_note(db: Session, note_id: int, data: NoteUpdate):
               tag_list.append(tag)
 
         note.tags = tag_list
+    else:
+        raise ValueError("No tag IDs")
 
     # Applica tutti gli altri campi
     for field, value in update_data.items():
@@ -94,18 +89,10 @@ def update_note(db: Session, note_id: int, data: NoteUpdate):
 
     db.commit()
     db.refresh(note)
-
     return note
-
 
 
 def delete_note(db: Session, note_id: int):
     note = read_note(db, note_id)
-
     remove_note(db, note)
-
     return note
-
-def soft_delete_note(db: Session, note_id: int): # Esperimento 
-    # Cambia lo stato della nota in ELIMINATO per renderlo non visibile.
-    return

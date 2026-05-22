@@ -3,37 +3,32 @@ from fastapi import APIRouter
 from sqlalchemy.orm import Session
 from services.category_service import read_category, read_all_categories, create_category, update_category, delete_category
 from core.database import get_db
-from schemas.category import CategoryRead, CategoryCreate, CategoryUpdate
+from schemas.category_schemas import CategoryRead, CategoryCreate, CategoryUpdate
 from typing import List
 
 router = APIRouter()
 
-# READ CATEGORY:
-@router.get("/api/v1/categories/{category_id}", response_model=CategoryRead) 
+# READ 
+@router.get("/{category_id}", response_model=CategoryRead) 
 def read_one_category(category_id: int, db: Session = Depends(get_db)) -> CategoryRead:
-    category = read_category(db, category_id)
-    return category
+    return read_category(db, category_id)
 
-
-@router.get("/api/v1/categories", response_model=List[CategoryRead])
+# /api/v1/categories/
+@router.get("/", response_model=List[CategoryRead])
 def view_all_categories(db: Session = Depends(get_db)) -> List[CategoryRead]:
-    category_list = read_all_categories(db)
-    return category_list
+    return read_all_categories(db)
 
-# CREATE CATEGORY:
-@router.post("/api/v1/categories", response_model=CategoryRead) 
+# CREATE : /api/v1/category
+@router.post("/", response_model=CategoryRead) 
 def create_new_category(category: CategoryCreate, db: Session = Depends(get_db)) -> CategoryRead:
-    new_category = create_category(db, category)
-    return new_category
+    return create_category(db, category)
 
 # UPDATE CATEGORY:
-@router.patch("/api/v1/category/{category_id}", response_model=CategoryRead)
+@router.patch("/{category_id}", response_model=CategoryRead)
 def patch_category(category_id: int, data: CategoryUpdate, db: Session = Depends(get_db)) -> CategoryRead:
-    updated = update_category(db, category_id, data)
-    return updated
+    return update_category(db, category_id, data)
 
 # DELETE CATEGORY:
-@router.delete("/api/v1/category/{category_id}", response_model=CategoryRead)
+@router.delete("/{category_id}", response_model=CategoryRead)
 def erase_category(category_id: int, db: Session = Depends(get_db)) -> CategoryRead:
-    category = delete_category(db, category_id)
-    return category
+    return delete_category(db, category_id)

@@ -5,7 +5,7 @@ from typing import Dict
 
 #-------LETTURA
 def get_user_by_id(db: Session, user_id: int): 
-    statement = select(User).where(User.UserID == user_id) # questa e' difatti la quary
+    statement = select(User).where(User.id == user_id) # questa e' difatti la quary
     result = db.execute(statement) # eseguo il codice
     return result.scalar_one_or_none()
 

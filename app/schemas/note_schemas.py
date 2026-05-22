@@ -1,6 +1,6 @@
 from pydantic import BaseModel, ConfigDict
 from typing import Optional
-from schemas.tag import TagRead
+from schemas.tag_schemas import TagRead
 from datetime import datetime
 
 class NoteBase(BaseModel):
