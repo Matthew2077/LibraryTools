@@ -26,33 +26,3 @@ app.include_router(user.router, prefix="/api/v1/users", tags=["Users"])
 @app.get("/")
 def root():
     return {"message": "LibraryTools API is running"}
-
-### ESPERIMENTI ERROR HANDLING // deleting 
-# 400 — dati non validi
-@app.exception_handler(ValueError)
-def value_error_handler(request: Request, exc: ValueError):
-    logger.error(f"Unhandled error: {exc}")
-    return JSONResponse(
-        status_code=400,
-        content={"detail": str(exc)}
-    )
-
-# 404 — risorsa non trovata
-@app.exception_handler(404)
-def not_found_handler(request: Request, exc: Exception):
-    logger.error(f"Unhandled error: {exc}")
-    return JSONResponse(
-        status_code=404,
-        content={"detail": "Resource not found"}
-    )
-
-# 500 — errore generico non gestito
-@app.exception_handler(Exception)
-def generic_error_handler(request: Request, exc: Exception):
-    logger.error(f"Unhandled error: {exc}")
-    return JSONResponse(
-        status_code=500,
-        content={"detail": "Internal server error"}
-    )
-
-
