@@ -1,60 +1,62 @@
 # LibraryTools
-LibraryTools is an API-first back-end project designed to manage and structure knowledge, notes, through categories and tags. 
+![Python](https://img.shields.io/badge/python-3.11+-blue.svg)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688.svg?logo=fastapi&logoColor=white)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
 
-## Purpose:
-First, let me briefly explain why I decided to start this project. I wanted to create something to prove both my hard skills also building something that truly matters, something useful not only for me, but for a for many others. Out there I've experienced many great applications doing exactly what this project is aiming for: allowing people to take and share notes. However, I want to build is an application where you don't need to log in or deal with anything complex. You should be able to just click a button, write, and share.
-This is something Telegraph does very well, in my opinion. The problem, however, is that it lacks tools to organize your notes, and you can't search for them within the app. That’s where I come in: LibraryTools will be an application where you can search through everyone’s notes simply by typing a title or using tags.
+A lightweight, API-first backend for managing and structuring knowledge through notes, categories, and tags.
+Built with **FastAPI** and **SQLAlchemy 2.0**, designed for clarity and future growth.
 
-### Project Architecture:
-The project follows a layered architecture to ensure separation of concerns and scalability:
-- **API layer**: Fast-API handles routing and request/response validation
-- **Service layer**: contains the program logic
-- **Repository layer**: manages database interactions
-- **Data layer**: SQLAlchemy ORM with relational models
 
-### Core Features:
-- CRUD operations for Notes and Categories
-- Tag system with many-to-many relationships
-- State management (draft, published, archived)
-- Basic search (title and tags)
-- Structured content using Markdown
+## What It Does
+LibraryTools helps you organize information by creating notes that are:
+- **Categorized** — group notes into structured categories
+- **Tagged** — assign multiple tags for flexible filtering
+- **Status-tracked** — manage note lifecycle (draft → published → archived)
 
-### Tech Stack
-**Backend**
+Perfect for personal knowledge bases, documentation systems, or as a foundation for larger content management platforms.
+
+
+## Project Structure:
+```
+librarytools/
+├── api/v1/          # FastAPI routes
+├── core/            # Database & models
+├── repositories/    # Data access layer
+├── schemas/         # Pydantic models
+└── services/        # Business logic
+```
+For a detailed technical overview, see [`v1_review.md`](./v1_review.md).
+
+## Quick Start
+
+### Prerequisites
 - Python 3.11+
-- FastAPI**
-- Uvicorn (ASGI server)
+- pip
 
-**Database**
-- SQLite → MVP / Development
-- PostgreSQL → Production 
+### Installation
+```bash
+# 1. Clone the repository
+git clone https://github.com/Matthew2077/LibraryTools.git
+cd librarytools
 
-**ORM & DB layer**
-- SQLAlchemy 2.0*
-- Alembic(migrazioni)
+# 2. Create a virtual environment
+python3 -m venv .venv
 
-**Data validation / schema**
-- Pydantic v2 per: request / response models and API & DB schema separation
+# Activate venv:
+# On Windows:
+venv\Scripts\activate
 
-**Frontend**
-- HTML + CSS
-- JavaScript vanilla
-- fetch API
+# On macOS/Linux:
+source venv/bin/activate
 
-## Status:
-In development – ​​MVP v1 construction
+# 3. Install dependencies
+pip install -r requirements.txt
 
-The first release includes:
-- Complete CRUD for:
-- Notes
-- Categories
-- Tags
-- Relationship system:
-- Notes ↔ Tags (many-to-many)
-- Notes → Category (one-to-many)
-- Guide status management (draft / published / archived)
-- Basic search system (title + tag)
-- Data persistence via SQLite
-- Automatic API documentation (Swagger / OpenAPI)
+# 4. Run database migrations
+alembic upgrade head
 
-## Extra Infos in MVPv1.md
+# 5. Start the server
+uvicorn main:app --reload
+
+The API will be available at http://127.0.0.1:8000
+```
