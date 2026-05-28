@@ -1,7 +1,9 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
 from core.models import Tag
 from typing import Dict
+from exceptions import DuplicateResourceError, LibraryToolsError
 
 #-------LETTURA
 def get_tag_by_id(db: Session, tag_id: int): 
@@ -21,17 +23,25 @@ def get_all_tags(db: Session):
 
 #-------CRUD
 def save_tag(db: Session, tag: Tag): #Session + Oggetto SQLalchemy 
-    db.add(tag) # aggiunge alla sessione
-    db.commit() 
-    db.refresh(tag) 
-    return tag
+    try:
+        db.add(tag)
+        db.commit() 
+        db.refresh(tag) 
+        return tag
+    except:
+        db.rollback()
+        raise DuplicateResourceError("tag", tag.id)
 
 def edit_tag (db: Session, tag: Tag, update_data: Dict): # Session + Oggetto esistente + dati da aggiornare
-    for field, value in update_data.items():
-        setattr(tag, field, value)# 
-    db.commit()
-    db.refresh(tag)
-    return tag
+    try:
+        for field, value in update_data.items():
+            setattr(tag, field, value)# 
+        db.commit()
+        db.refresh(tag)
+        return tag
+    except:
+        db.rollback()
+        raise LibraryToolsError("repository", "edit_tag" , tag.id)
 
 def remove_tag(db: Session, tag: Tag):
     db.delete(tag)

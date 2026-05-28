@@ -10,6 +10,7 @@ from datetime import datetime
 def generate_slug(title: str) -> str:
     return title.lower().strip().replace(" ", "-")
 
+
 def read_note(db: Session, note_id: int):
     note = get_note_by_id(db, note_id)
 

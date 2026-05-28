@@ -1,7 +1,9 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
 from core.models import Category
 from typing import Dict
+from exceptions import DuplicateResourceError, LibraryToolsError
 
 #-------LETTURA
 def get_category_by_id(db: Session, category_id: int): 
@@ -21,17 +23,27 @@ def get_category_by_name(db: Session, category_name: str):
 
 #-------CRUD
 def save_category(db: Session, category: Category): #Session + Oggetto SQLalchemy 
-    db.add(category) # aggiunge alla sessione
-    db.commit() 
-    db.refresh(category)
-    return category
+    try:
+        db.add(category) # aggiunge alla sessione
+        db.commit() 
+        db.refresh(category)
+        return category
+    except:
+        db.rollback()
+        raise DuplicateResourceError("category", category.id)
 
 def edit_category(db: Session, category: Category, update_data: Dict): # Session + Oggetto esistente + dati da aggiornare
-    for field, value in update_data.items():
-        setattr(category, field, value) 
-    db.commit()
-    db.refresh(category)
-    return category
+    try:
+        for field, value in update_data.items():
+            setattr(category, field, value) 
+        db.commit()
+        db.refresh(category)
+        return category
+    except:
+        db.rollback()
+        raise LibraryToolsError("repository", "edit_category", category.id)
+
+
 
 def remove_category(db: Session, category: Category):
     db.delete(category)

@@ -1,7 +1,9 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
 from core.models import User
 from typing import Dict
+from exceptions import DuplicateResourceError, LibraryToolsError
 
 #-------LETTURA
 def get_user_by_id(db: Session, user_id: int): 
@@ -16,17 +18,25 @@ def get_all_users(db: Session):
 
 #-------CRUD
 def save_user(db: Session, user: User): #Session + Oggetto SQLalchemy 
-    db.add(user) # aggiunge alla sessione
-    db.commit() 
-    db.refresh(user) 
-    return user
+    try:
+        db.add(user)
+        db.commit() 
+        db.refresh(user) 
+        return user
+    except:
+        db.rollback()
+        raise DuplicateResourceError("user", user.id)
 
-def edit_user(db: Session, user: User, update_data: Dict): # Session + Oggetto esistente + dati da aggiornare
-    for field, value in update_data.items():
-        setattr(user, field, value)# 
-    db.commit()
-    db.refresh(user)
-    return user
+def edit_user(db: Session, user: User, update_data: Dict): 
+    try:
+        for field, value in update_data.items():
+            setattr(user, field, value)# 
+        db.commit()
+        db.refresh(user)
+        return user
+    except:
+        db.rollback()
+        raise LibraryToolsError("repository", "edit_user" , user.id)
 
 def remove_user(db: Session, user: User):
     db.delete(user)
