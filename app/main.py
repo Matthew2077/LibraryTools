@@ -1,5 +1,4 @@
-from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
+from fastapi import FastAPI
 from api.v1 import note, category, tag, user
 from core import Base, engine
 import logging
@@ -8,7 +7,10 @@ import logging
 app = FastAPI(
     title="LibraryTools API",
     version="1.0.0",
-    description="API per gestione note, categorie e tag"
+    description="""A lightweight, API-first backend for managing and structuring knowledge through notes, categories, and tags.
+Built with **FastAPI** and **SQLAlchemy 2.0**, designed for clarity and future growth.
+    **View GitHub page:** github.com/Matthew2077/LibraryTools
+"""
 )
 
 logger = logging.getLogger(__name__)

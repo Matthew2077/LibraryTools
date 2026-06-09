@@ -10,7 +10,7 @@ class NoteBase(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     
 
-class NoteCreate(NoteBase):
+class NoteCreate(BaseModel):
     tag_ids: list[int] 
 #in fase di creazione ricevo IDs e non oggetti Tag
 
@@ -18,10 +18,10 @@ class NoteUpdate(BaseModel):
     title: Optional[str] = None
     content: Optional[str] = None
     category_id: Optional[int] = None
-    tags: Optional[list[TagRead]] = None
+    tags: Optional[list[int]] = None
     model_config = ConfigDict(from_attributes=True)
 
-class NoteRead(NoteBase):
+class NoteRead(BaseModel):
     id: int
     title: str
     content: str

@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 from core.models import Tag
 from typing import Dict
-from exceptions import DuplicateResourceError, LibraryToolsError
+from exceptions import DuplicateResourceError, UnableToUpdateThisResource, ResourceNotFoundError
 
 #-------LETTURA
 def get_tag_by_id(db: Session, tag_id: int): 
@@ -22,7 +22,7 @@ def get_all_tags(db: Session):
     return result.scalars().all()
 
 #-------CRUD
-def save_tag(db: Session, tag: Tag): #Session + Oggetto SQLalchemy 
+def save_tag(db: Session, tag: Tag):
     try:
         db.add(tag)
         db.commit() 
@@ -32,7 +32,7 @@ def save_tag(db: Session, tag: Tag): #Session + Oggetto SQLalchemy
         db.rollback()
         raise DuplicateResourceError("tag", tag.id)
 
-def edit_tag (db: Session, tag: Tag, update_data: Dict): # Session + Oggetto esistente + dati da aggiornare
+def edit_tag (db: Session, tag: Tag, update_data: Dict): 
     try:
         for field, value in update_data.items():
             setattr(tag, field, value)# 
@@ -41,9 +41,13 @@ def edit_tag (db: Session, tag: Tag, update_data: Dict): # Session + Oggetto esi
         return tag
     except:
         db.rollback()
-        raise LibraryToolsError("repository", "edit_tag" , tag.id)
+        raise UnableToUpdateThisResource("repository", "edit_tag" , tag.id)
 
 def remove_tag(db: Session, tag: Tag):
-    db.delete(tag)
-    db.commit()
-    return tag
+    try:
+        db.delete(tag)
+        db.commit()
+        return tag
+    except:
+        db.rollback()
+        raise ResourceNotFoundError("tag", tag.id)

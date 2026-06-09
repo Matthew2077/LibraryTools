@@ -12,7 +12,6 @@ class UserCreate(UserBase):
 class UserUpdate(BaseModel):
     name: Optional[str] = None
     email: Optional[str] = None
-    password: Optional[str] = None
     model_config = ConfigDict(from_attributes=True)
 
 class UserRead(UserBase):

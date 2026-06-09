@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 from core.models import Category
 from typing import Dict
-from exceptions import DuplicateResourceError, LibraryToolsError
+from exceptions import DuplicateResourceError, UnableToUpdateThisResource, ResourceNotFoundError
 
 #-------LETTURA
 def get_category_by_id(db: Session, category_id: int): 
@@ -22,9 +22,9 @@ def get_category_by_name(db: Session, category_name: str):
     return result.scalar_one_or_none()
 
 #-------CRUD
-def save_category(db: Session, category: Category): #Session + Oggetto SQLalchemy 
+def save_category(db: Session, category: Category): 
     try:
-        db.add(category) # aggiunge alla sessione
+        db.add(category)
         db.commit() 
         db.refresh(category)
         return category
@@ -41,11 +41,15 @@ def edit_category(db: Session, category: Category, update_data: Dict): # Session
         return category
     except:
         db.rollback()
-        raise LibraryToolsError("repository", "edit_category", category.id)
+        raise UnableToUpdateThisResource("category", category.id)
 
 
 
 def remove_category(db: Session, category: Category):
-    db.delete(category)
-    db.commit()
-    return category
+    try:
+        db.delete(category)
+        db.commit()
+        return category
+    except:
+        db.rollback()
+        raise ResourceNotFoundError("category", category.id)

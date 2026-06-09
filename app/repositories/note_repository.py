@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 from core.models import Note, NoteState, NoteTag
 from typing import Dict
-from exceptions import DuplicateResourceError, LibraryToolsError
+from exceptions import DuplicateResourceError, UnableToUpdateThisResource, ResourceNotFoundError
 
 #-------LETTURA
 def get_note_by_id(db: Session, note_id: int):
@@ -59,9 +59,13 @@ def edit_note(db: Session, note: Note, update_data: Dict):
         return note
     except:
         db.rollback()
-        raise LibraryToolsError("repository", "edit_note" , note.id)
+        raise UnableToUpdateThisResource("repository", "edit_note" , note.id)
 
 def remove_note(db: Session, note: Note):
-    db.delete(note)
-    db.commit()
-    return note
+    try:
+        db.delete(note)
+        db.commit()
+        return note
+    except:
+        db.rollback()
+        raise ResourceNotFoundError("note", note.id)

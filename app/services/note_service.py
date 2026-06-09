@@ -88,6 +88,8 @@ def update_note(db: Session, note_id: int, data: NoteUpdate):
     for field, value in update_data.items():
           setattr(note, field, value)
 
+    updated_note = edit_note(db, note, update_data)
+    
     db.commit()
     db.refresh(note)
     return note

@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 from core.models import User
 from typing import Dict
-from exceptions import DuplicateResourceError, LibraryToolsError
+from exceptions import DuplicateResourceError, UnableToUpdateThisResource, ResourceNotFoundError
 
 #-------LETTURA
 def get_user_by_id(db: Session, user_id: int): 
@@ -36,9 +36,13 @@ def edit_user(db: Session, user: User, update_data: Dict):
         return user
     except:
         db.rollback()
-        raise LibraryToolsError("repository", "edit_user" , user.id)
+        raise UnableToUpdateThisResource("repository", "edit_user" , user.id)
 
 def remove_user(db: Session, user: User):
-    db.delete(user)
-    db.commit()
-    return user
+    try:
+        db.delete(user)
+        db.commit()
+        return user
+    except:
+        db.rollback()
+        raise ResourceNotFoundError("user", user.id)
