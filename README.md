@@ -39,24 +39,21 @@ For a detailed technical overview, see [`v1_review.md`](./v1_review.md).
 git clone https://github.com/Matthew2077/LibraryTools.git
 cd librarytools
 
-# 2. Create a virtual environment
-python3 -m venv .venv
+# 2. Build docker image
+sudo docker build -t librarytools .
 
-# Activate venv:
-# On Windows:
-venv\Scripts\activate
+# 3. Run container
+sudo docker run -p 5000:5000 librarytools
 
-# On macOS/Linux:
-source venv/bin/activate
+The API will be available at http://127.0.0.1:8000/docs#/
 
-# 3. Install dependencies
-pip install -r requirements.txt
 
-# 4. Run database migrations
-alembic upgrade head
 
-# 5. Start the server
-uvicorn main:app --reload
 
-The API will be available at http://127.0.0.1:8000
+# Usefull commands:
+# Remove all not used images
+sudo docker system prune
+# view active containers
+sudo docker ps
+
 ```

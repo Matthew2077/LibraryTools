@@ -1,5 +1,5 @@
-#dockerfile
-#docker-compose.yml
 .venv
-
-# remove in future
+__pycache__
+*.pyc
+*.db
+.env
